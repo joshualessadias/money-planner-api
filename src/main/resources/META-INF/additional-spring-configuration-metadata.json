@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.application.title",
+      "type": "java.lang.String",
+      "description": "Application title for viewing."
+    }
+  ]
+}
