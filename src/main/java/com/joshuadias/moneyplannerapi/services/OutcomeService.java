@@ -126,4 +126,11 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         log.info(MessageEnum.OUTCOME_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageOutcomes.getNumberOfElements())));
         return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class);
     }
+
+    public void delete(Long id) {
+        log.info(MessageEnum.OUTCOME_DELETING_WITH_ID.getMessage(String.valueOf(id)));
+        var outcome = findByIdOrThrow(id);
+        repository.delete(outcome);
+        log.info(MessageEnum.OUTCOME_DELETED_WITH_ID.getMessage(String.valueOf(id)));
+    }
 }

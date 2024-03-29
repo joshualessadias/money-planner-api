@@ -21,17 +21,13 @@ public class OutcomeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createOutcome(
-            @Valid @RequestBody OutcomeRequestDTO outcomeRequestDto
-    ) {
+    public void createOutcome(@Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
         outcomeService.create(outcomeRequestDto);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OutcomeResponseDTO getOutcomeById(
-            @PathVariable Long id
-    ) {
+    public OutcomeResponseDTO getOutcomeById(@PathVariable Long id) {
         return outcomeService.getById(id);
     }
 
@@ -69,9 +65,13 @@ public class OutcomeController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateOutcome(
-            @PathVariable Long id, @Valid @RequestBody OutcomeRequestDTO outcomeRequestDto
-    ) {
+    public void updateOutcome(@PathVariable Long id, @Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
         outcomeService.update(id, outcomeRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOutcome(@PathVariable Long id) {
+        outcomeService.delete(id);
     }
 }
