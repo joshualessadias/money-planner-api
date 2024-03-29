@@ -18,7 +18,9 @@ public enum MessageEnum {
     OUTCOME_UPDATED_WITH_ID("message.outcome.updated.with.id"),
     OUTCOME_FINDING_BY_ID("message.outcome.finding.by.id"),
     OUTCOME_FINDING_ALL_PAGEABLE("message.outcome.finding.all.pageable"),
-    OUTCOME_FOUND_ALL_PAGEABLE("message.outcome.found.all.pageable"),;
+    OUTCOME_FOUND_ALL_PAGEABLE("message.outcome.found.all.pageable"),
+    OUTCOME_DELETING_WITH_ID("message.outcome.deleting.with.id"),
+    OUTCOME_DELETED_WITH_ID("message.outcome.deleted.with.id"),;
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
