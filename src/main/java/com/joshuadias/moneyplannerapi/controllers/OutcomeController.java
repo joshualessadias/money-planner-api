@@ -35,7 +35,7 @@ public class OutcomeController {
         return outcomeService.getById(id);
     }
 
-    @GetMapping
+    @GetMapping("/pageable")
     @ResponseStatus(HttpStatus.OK)
     public Page<OutcomeResponseDTO> getOutcomePageable(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
