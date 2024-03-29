@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "outcome")
 public class Outcome extends BaseModel {
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 100)
     private String description;
 
     @Column(name = "value", nullable = false, precision = 12, scale = 2)
