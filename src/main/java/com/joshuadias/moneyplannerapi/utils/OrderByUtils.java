@@ -1,5 +1,7 @@
 package com.joshuadias.moneyplannerapi.utils;
 
+import com.joshuadias.moneyplannerapi.enums.MessageEnum;
+import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,13 @@ public class OrderByUtils {
         var direction = sortSplit[1].equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
 
         return new CustomSort(field, direction);
+    }
+
+    public static void validateOrderBy(String orderBy) {
+        var ORDER_BY_PATTERN = ".+:(asc|desc)$";
+        if (!orderBy.matches(ORDER_BY_PATTERN)) {
+            throw new BadRequestException(MessageEnum.ORDER_BY_VALIDATION_ERROR.getMessage());
+        }
     }
 
     @AllArgsConstructor
