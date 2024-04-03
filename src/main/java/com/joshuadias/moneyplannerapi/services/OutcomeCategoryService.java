@@ -1,6 +1,7 @@
 package com.joshuadias.moneyplannerapi.services;
 
 import com.joshuadias.moneyplannerapi.dto.requests.OutcomeCategoryRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.OutcomeCategoryResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
@@ -40,5 +41,11 @@ public class OutcomeCategoryService
     public OutcomeCategory findByIdOrThrow(Long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(
                 MessageEnum.OUTCOME_CATEGORY_NOT_FOUND_WITH_ID.getMessage(String.valueOf(id))));
+    }
+
+    public OutcomeCategoryResponseDTO getById(Long id) {
+        log.info(MessageEnum.OUTCOME_CATEGORY_FINDING_BY_ID.getMessage(String.valueOf(id)));
+        var outcomeCategory = findByIdOrThrow(id);
+        return convertToSingleDTO(outcomeCategory, OutcomeCategoryResponseDTO.class);
     }
 }

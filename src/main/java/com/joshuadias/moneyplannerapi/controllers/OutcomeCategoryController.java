@@ -1,6 +1,7 @@
 package com.joshuadias.moneyplannerapi.controllers;
 
 import com.joshuadias.moneyplannerapi.dto.requests.OutcomeCategoryRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.OutcomeCategoryResponseDTO;
 import com.joshuadias.moneyplannerapi.services.OutcomeCategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,11 @@ public class OutcomeCategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createOutcome(@Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
         outcomeCategoryService.create(outcomeCategoryRequestDTO);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public OutcomeCategoryResponseDTO getOutcomeCategoryById(@PathVariable Long id) {
+        return outcomeCategoryService.getById(id);
     }
 }
