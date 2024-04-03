@@ -4,6 +4,7 @@ import com.joshuadias.moneyplannerapi.dto.requests.OutcomeFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.OutcomeRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeResponseDTO;
 import com.joshuadias.moneyplannerapi.services.OutcomeService;
+import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,6 +47,7 @@ public class OutcomeController {
             @RequestParam(name = "finalValue", required = false) BigDecimal finalValue,
             @RequestParam(name = "description", required = false) String description
     ) {
+        OrderByUtils.validateOrderBy(orderBy);
         var outcomeFilter = OutcomeFilterRequestDTO.builder()
                 .page(page)
                 .size(size)
