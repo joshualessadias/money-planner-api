@@ -9,9 +9,6 @@ import java.util.ResourceBundle;
 @Getter
 public enum MessageEnum {
     OUTCOME_CREATING("message.outcome.creating"),
-    OUTCOME_CATEGORY_NOT_FOUND_WITH_ID("message.outcome.category.not.found.with.id"),
-    PAYMENT_METHOD_NOT_FOUND_WITH_ID("message.payment.method.not.found.with.id"),
-    BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
     OUTCOME_UPDATING_WITH_ID("message.outcome.updating.with.id"),
     OUTCOME_CREATED_WITH_ID("message.outcome.created.with.id"),
     OUTCOME_NOT_FOUND_WITH_ID("message.outcome.not.found.with.id"),
@@ -20,7 +17,15 @@ public enum MessageEnum {
     OUTCOME_FINDING_ALL_PAGEABLE("message.outcome.finding.all.pageable"),
     OUTCOME_FOUND_ALL_PAGEABLE("message.outcome.found.all.pageable"),
     OUTCOME_DELETING_WITH_ID("message.outcome.deleting.with.id"),
-    OUTCOME_DELETED_WITH_ID("message.outcome.deleted.with.id"),;
+    OUTCOME_DELETED_WITH_ID("message.outcome.deleted.with.id"),
+
+    OUTCOME_CATEGORY_NOT_FOUND_WITH_ID("message.outcome.category.not.found.with.id"),
+    OUTCOME_CATEGORY_CREATING("message.outcome.category.creating"),
+    OUTCOME_CATEGORY_CREATED_WITH_ID("message.outcome.category.created.with.id"),
+
+    PAYMENT_METHOD_NOT_FOUND_WITH_ID("message.payment.method.not.found.with.id"),
+
+    BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
