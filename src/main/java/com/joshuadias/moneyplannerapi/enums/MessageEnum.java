@@ -22,6 +22,7 @@ public enum MessageEnum {
     OUTCOME_CATEGORY_NOT_FOUND_WITH_ID("message.outcome.category.not.found.with.id"),
     OUTCOME_CATEGORY_CREATING("message.outcome.category.creating"),
     OUTCOME_CATEGORY_CREATED_WITH_ID("message.outcome.category.created.with.id"),
+    OUTCOME_CATEGORY_ALREADY_EXISTS_WITH_NAME("message.outcome.category.already.exists.with.name"),
 
     PAYMENT_METHOD_NOT_FOUND_WITH_ID("message.payment.method.not.found.with.id"),
 
