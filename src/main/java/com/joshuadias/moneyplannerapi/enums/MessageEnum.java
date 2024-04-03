@@ -25,10 +25,14 @@ public enum MessageEnum {
     OUTCOME_CATEGORY_ALREADY_EXISTS_WITH_NAME("message.outcome.category.already.exists.with.name"),
     OUTCOME_CATEGORY_FINDING_BY_ID("message.outcome.category.finding.by.id"),
     OUTCOME_CATEGORY_FINDING_ALL("message.outcome.category.finding.all"),
+    OUTCOME_CATEGORY_FINDING_ALL_PAGEABLE("message.outcome.category.finding.all.pageable"),
+    OUTCOME_CATEGORY_FOUND_ALL_PAGEABLE("message.outcome.category.found.all.pageable"),
 
     PAYMENT_METHOD_NOT_FOUND_WITH_ID("message.payment.method.not.found.with.id"),
 
-    BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id");
+    BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
+
+    ORDER_BY_VALIDATION_ERROR("message.order.by.validation.error");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
