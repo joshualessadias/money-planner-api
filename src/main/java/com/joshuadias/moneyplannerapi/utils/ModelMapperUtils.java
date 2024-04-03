@@ -63,10 +63,10 @@ public class ModelMapperUtils {
     }
 
     public <D, T> D modelMapperHandler(PropertyMap<T, D> propertyMaps, T origin, Class<D> target) {
-        String chavePropertyMap;
+        String keyPropertyMap;
         if (propertyMaps != null) {
-            chavePropertyMap = generateKeyPropertyMap(origin.getClass(), target);
-            if (!propertyMapList.contains(chavePropertyMap)) {
+            keyPropertyMap = generateKeyPropertyMap(origin.getClass(), target);
+            if (!propertyMapList.contains(keyPropertyMap)) {
                 List.of(propertyMaps).forEach(propertyMap -> {
                     try {
                         modelMapperStrict.addMappings(propertyMap);
@@ -76,7 +76,7 @@ public class ModelMapperUtils {
                         }
                     }
                 });
-                propertyMapList.add(chavePropertyMap);
+                propertyMapList.add(keyPropertyMap);
             }
             return modelMapperStrict.map(origin, target);
         }
