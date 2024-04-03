@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class OutcomeCategoryService
@@ -47,5 +49,11 @@ public class OutcomeCategoryService
         log.info(MessageEnum.OUTCOME_CATEGORY_FINDING_BY_ID.getMessage(String.valueOf(id)));
         var outcomeCategory = findByIdOrThrow(id);
         return convertToSingleDTO(outcomeCategory, OutcomeCategoryResponseDTO.class);
+    }
+
+    public List<OutcomeCategoryResponseDTO> getAll() {
+        log.info(MessageEnum.OUTCOME_CATEGORY_FINDING_ALL.getMessage());
+        var outcomeCategories = repository.findAll();
+        return convertToListDTO(outcomeCategories, OutcomeCategoryResponseDTO.class);
     }
 }
