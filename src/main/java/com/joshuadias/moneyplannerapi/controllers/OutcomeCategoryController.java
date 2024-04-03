@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/outcome-category")
@@ -24,5 +26,11 @@ public class OutcomeCategoryController {
     @ResponseStatus(HttpStatus.OK)
     public OutcomeCategoryResponseDTO getOutcomeCategoryById(@PathVariable Long id) {
         return outcomeCategoryService.getById(id);
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<OutcomeCategoryResponseDTO> getOutcomeList() {
+        return outcomeCategoryService.getAll();
     }
 }
