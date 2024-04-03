@@ -6,6 +6,9 @@ import org.springframework.data.domain.Sort;
 
 public class OrderByUtils {
     public static Sort getSorting(String sort) {
+        if (sort == null) {
+            return Sort.unsorted();
+        }
         var customSort = splitSort(sort);
         return Sort.by(customSort.getDirection(), customSort.getColumn());
     }
