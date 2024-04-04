@@ -25,10 +25,17 @@ import java.util.List;
 public class OutcomeCategoryService
         extends AbstractServiceRepository<OutcomeCategoryRepository, OutcomeCategory, Long> {
 
-    private OutcomeCategory buildOutcomeCategoryFromRequest(OutcomeCategoryRequestDTO outcomeCategoryRequestDto) {
-        var outcomeCategory = new OutcomeCategory();
+    private void setOutcomeCategoryParametersFromRequest(
+            OutcomeCategoryRequestDTO outcomeCategoryRequestDto,
+            OutcomeCategory outcomeCategory
+    ) {
         outcomeCategory.setName(outcomeCategoryRequestDto.getName());
         outcomeCategory.setDescription(outcomeCategoryRequestDto.getDescription());
+    }
+
+    private OutcomeCategory buildOutcomeCategoryFromRequest(OutcomeCategoryRequestDTO outcomeCategoryRequestDto) {
+        var outcomeCategory = new OutcomeCategory();
+        setOutcomeCategoryParametersFromRequest(outcomeCategoryRequestDto, outcomeCategory);
         return outcomeCategory;
     }
 
@@ -97,5 +104,13 @@ public class OutcomeCategoryService
         var pageOutcomeCategories = repository.findAll(spec, pageable);
         log.info(MessageEnum.OUTCOME_CATEGORY_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageOutcomeCategories.getNumberOfElements())));
         return convertToPageDTO(pageOutcomeCategories, OutcomeCategoryResponseDTO.class);
+    }
+
+    public void update(Long id, OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
+        log.info(MessageEnum.OUTCOME_CATEGORY_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
+        var oldOutcomeCategory = findByIdOrThrow(id);
+        setOutcomeCategoryParametersFromRequest(outcomeCategoryRequestDTO, oldOutcomeCategory);
+        var updatedOutcome = save(oldOutcomeCategory);
+        log.info(MessageEnum.OUTCOME_CATEGORY_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
     }
 }

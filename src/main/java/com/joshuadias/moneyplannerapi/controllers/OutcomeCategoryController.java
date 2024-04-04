@@ -57,4 +57,13 @@ public class OutcomeCategoryController {
 
         return outcomeCategoryService.getAllPageable(outcomeCategoryFilter);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void updateOutcomeCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO
+    ) {
+        outcomeCategoryService.update(id, outcomeCategoryRequestDTO);
+    }
 }
