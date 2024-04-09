@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.dto.requests;
+package com.joshuadias.moneyplannerapi.dto.requests.outcome;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
