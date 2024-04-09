@@ -28,6 +28,7 @@ public class OrderByUtils {
     }
 
     public static void validateOrderBy(String orderBy) {
+        if (orderBy == null) return;
         var ORDER_BY_PATTERN = ".+:(asc|desc)$";
         if (!orderBy.matches(ORDER_BY_PATTERN)) {
             throw new BadRequestException(MessageEnum.ORDER_BY_VALIDATION_ERROR.getMessage());
