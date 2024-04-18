@@ -1,12 +1,7 @@
 package com.joshuadias.moneyplannerapi;
 
-import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.requests.appUser.RoleRequestDTO;
-import com.joshuadias.moneyplannerapi.services.AppUserService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
