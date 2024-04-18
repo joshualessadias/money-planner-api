@@ -2,9 +2,7 @@ package com.joshuadias.moneyplannerapi.services;
 
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.requests.appUser.RoleRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.AppUserResponseDTO;
-import com.joshuadias.moneyplannerapi.dto.responses.RoleResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.AppUser;
@@ -17,17 +15,12 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.AbstractConverter;
-import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +31,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
     PropertyMap<AppUser, AppUserResponseDTO> mapEntityToResponseDTO = new PropertyMap<AppUser, AppUserResponseDTO>() {
         @Override
         protected void configure() {
-            map().setRolesId(source.getRoles().stream().map(Role::getId).toList());
+            map().setRoles(source.getRoles().stream().map(Role::getName).toList());
         }
     };
 
@@ -57,21 +50,6 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         var createdAppUser = repository.save(appUser);
         log.info(MessageEnum.APP_USER_CREATED_WITH_ID.getMessage(String.valueOf(appUser.getId())));
         return convertToSingleDTO(createdAppUser, AppUserResponseDTO.class);
-    }
-
-    private Role buildRoleFromRequest(RoleRequestDTO roleRequest) {
-        var role = new Role();
-        role.setName(roleRequest.getName());
-        return role;
-    }
-
-    @Transactional
-    public RoleResponseDTO createRole(RoleRequestDTO roleRequest) {
-        log.info(MessageEnum.ROLE_CREATING.getMessage());
-        var role = buildRoleFromRequest(roleRequest);
-        var createdRole = roleRepository.save(role);
-        log.info(MessageEnum.ROLE_CREATED_WITH_ID.getMessage(String.valueOf(role.getId())));
-        return convertToSingleDTO(createdRole, RoleResponseDTO.class);
     }
 
     public AppUser findAppUserByIdOrThrow(Long appUserId) {

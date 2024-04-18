@@ -83,6 +83,10 @@ ALTER TABLE outcome_category
     ADD CONSTRAINT uc_outcome_category_name UNIQUE (name)
 GO
 
+ALTER TABLE role
+    ADD CONSTRAINT uc_role_name UNIQUE (name)
+GO
+
 ALTER TABLE outcome
     ADD CONSTRAINT FK_OUTCOME_ON_BANK FOREIGN KEY (bank_id) REFERENCES bank (id)
 GO

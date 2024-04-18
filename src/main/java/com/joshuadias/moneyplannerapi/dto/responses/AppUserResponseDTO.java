@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.dto.responses;
 
+import com.joshuadias.moneyplannerapi.enums.RoleEnum;
 import lombok.Data;
 
 import java.util.List;
@@ -9,5 +10,5 @@ public class AppUserResponseDTO {
     private Long id;
     private String name;
     private String email;
-    private List<Long> rolesId;
+    private List<RoleEnum> roles;
 }
