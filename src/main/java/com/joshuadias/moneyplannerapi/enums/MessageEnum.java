@@ -34,7 +34,19 @@ public enum MessageEnum {
 
     BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
 
-    ORDER_BY_VALIDATION_ERROR("message.order.by.validation.error");
+    ORDER_BY_VALIDATION_ERROR("message.order.by.validation.error"),
+
+    APP_USER_CREATING("message.app.user.creating"),
+    APP_USER_CREATED_WITH_ID("message.app.user.created.with.id"),
+    ROLE_CREATING("message.role.creating"),
+    ROLE_CREATED_WITH_ID("message.role.created.with.id"),
+    ADDING_ROLE_WITH_ID_TO_APP_USER_WITH_ID("message.adding.role.with.id.to.app.user.with.id"),
+    APP_USER_NOT_FOUND_WITH_ID("message.app.user.not.found.with.id"),
+    ROLE_NOT_FOUND_WITH_ID("message.role.not.found.with.id"),
+    ROLE_ADDED_TO_APP_USER("message.role.added.to.app.user"),
+    APP_USER_NOT_FOUND_WITH_EMAIL("message.app.user.not.found.with.email"),
+    APP_USER_FINDING_ALL_PAGEABLE("message.app.user.finding.all.pageable"),
+    APP_USER_FOUND_ALL_PAGEABLE("message.app.user.found.all.pageable"),;
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
