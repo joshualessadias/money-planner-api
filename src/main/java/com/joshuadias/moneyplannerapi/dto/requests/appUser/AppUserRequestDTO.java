@@ -23,10 +23,12 @@ public class AppUserRequestDTO {
     @NotBlank(message = NAME_NOT_BLANK_MESSAGE)
     @Size(max = NAME_MAX_SIZE, message = NAME_MAX_SIZE_MESSAGE)
     private String name;
+
     @NotBlank(message = EMAIL_NOT_BLANK_MESSAGE)
     @Size(max = EMAIL_MAX_SIZE, message = EMAIL_MAX_SIZE_MESSAGE)
     @Email(message = EMAIL_MUST_BE_VALID)
     private String email;
+
     @NotBlank(message = PASSWORD_NOT_BLANK_MESSAGE)
     @Size(max = PASSWORD_MAX_SIZE, message = PASSWORD_MAX_SIZE_MESSAGE)
     private String password;

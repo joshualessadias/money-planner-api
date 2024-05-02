@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+import static com.joshuadias.moneyplannerapi.enums.RoleEnum.USER;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -49,7 +51,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         var appUser = buildAppUserFromRequest(appUserRequest);
         var createdAppUser = repository.save(appUser);
         log.info(MessageEnum.APP_USER_CREATED_WITH_ID.getMessage(String.valueOf(appUser.getId())));
-        return convertToSingleDTO(createdAppUser, AppUserResponseDTO.class);
+        return addRoleToAppUser(createdAppUser.getId(), USER.getId());
     }
 
     public AppUser findAppUserByIdOrThrow(Long appUserId) {
