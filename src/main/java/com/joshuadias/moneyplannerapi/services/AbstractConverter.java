@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.function.Function;
 
 public abstract class AbstractConverter {
     @Autowired
@@ -14,6 +13,10 @@ public abstract class AbstractConverter {
 
     public <C, T> Page<C> convertToPageDTO(Page<T> page, Class<C> clazz) {
         return page.map(entity -> convertToSingleDTO(entity, clazz));
+    }
+
+    public <C, T> Page<C> convertToPageDTO(Page<T> page, Class<C> clazz, PropertyMap<T, C> propertyMap) {
+        return page.map(entity -> convertToSingleDTO(entity, clazz, propertyMap));
     }
 
     public <C, T> List<C> convertToListDTO(List<T> list, Class<C> clazz) {

@@ -12,4 +12,22 @@ public class MoneyPlannerApiApplication {
         SpringApplication.run(MoneyPlannerApiApplication.class, args);
     }
 
+//    @Bean
+//    CommandLineRunner run(AppUserService appUserService) {
+//        return args -> {
+//            appUserService.createRole(new RoleRequestDTO("ROLE_USER"));
+//            appUserService.createRole(new RoleRequestDTO("ROLE_ADMIN"));
+//            appUserService.createRole(new RoleRequestDTO("ROLE_MANAGER"));
+//
+//            appUserService.createAppUser(new AppUserRequestDTO("joshua", "joshua@gmail.com", "123456"));
+//            appUserService.createAppUser(new AppUserRequestDTO("natali", "natali@gmail.com", "123456"));
+//
+//            appUserService.addRoleToAppUser(1L, 1L);
+//            appUserService.addRoleToAppUser(1L, 2L);
+//            appUserService.addRoleToAppUser(1L, 3L);
+//            appUserService.addRoleToAppUser(2L, 3L);
+//            appUserService.addRoleToAppUser(2L, 2L);
+//        };
+//    }
+
 }
