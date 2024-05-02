@@ -3,7 +3,8 @@ CREATE TABLE app_user
     id              bigint IDENTITY (1, 1) NOT NULL,
     created_at      datetime               NOT NULL,
     last_updated_at datetime,
-    name            varchar(50)            NOT NULL,
+    first_name      varchar(50)            NOT NULL,
+    last_name       varchar(50)            NOT NULL,
     email           varchar(50)            NOT NULL,
     password        varchar(50)            NOT NULL,
     CONSTRAINT pk_app_user PRIMARY KEY (id)

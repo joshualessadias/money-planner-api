@@ -30,7 +30,7 @@ import static com.joshuadias.moneyplannerapi.enums.RoleEnum.USER;
 public class AppUserService extends AbstractServiceRepository<AppUserRepository, AppUser, Long> {
     private final RoleRepository roleRepository;
 
-    PropertyMap<AppUser, AppUserResponseDTO> mapEntityToResponseDTO = new PropertyMap<AppUser, AppUserResponseDTO>() {
+    PropertyMap<AppUser, AppUserResponseDTO> mapEntityToResponseDTO = new PropertyMap<>() {
         @Override
         protected void configure() {
             map().setRoles(source.getRoles().stream().map(Role::getName).toList());
@@ -39,7 +39,8 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
 
     private AppUser buildAppUserFromRequest(AppUserRequestDTO appUserRequest) {
         var appUser = new AppUser();
-        appUser.setName(appUserRequest.getName());
+        appUser.setFirstName(appUserRequest.getFirstName());
+        appUser.setLastName(appUserRequest.getLastName());
         appUser.setEmail(appUserRequest.getEmail());
         appUser.setPassword(appUserRequest.getPassword());
         return appUser;
@@ -93,7 +94,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
     }
 
     private Specification<AppUser> generateSpecification(AppUserFilterRequestDTO filter) {
-        return (root, query, criteriaBuilder) -> {
+        return (root, _, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(filter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
