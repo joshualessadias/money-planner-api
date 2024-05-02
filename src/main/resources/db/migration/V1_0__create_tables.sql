@@ -71,7 +71,7 @@ CREATE TABLE role
     id              bigint IDENTITY (1, 1) NOT NULL,
     created_at      datetime               NOT NULL,
     last_updated_at datetime,
-    name            varchar(20)            NOT NULL,
+    role            varchar(20)            NOT NULL,
     CONSTRAINT pk_role PRIMARY KEY (id)
 )
 GO
@@ -85,7 +85,7 @@ ALTER TABLE outcome_category
 GO
 
 ALTER TABLE role
-    ADD CONSTRAINT uc_role_name UNIQUE (name)
+    ADD CONSTRAINT uc_role_role UNIQUE (role)
 GO
 
 ALTER TABLE outcome

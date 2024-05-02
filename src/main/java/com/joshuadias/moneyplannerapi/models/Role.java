@@ -19,7 +19,7 @@ import static jakarta.persistence.EnumType.STRING;
 @AllArgsConstructor
 @Table(name = "role")
 public class Role extends BaseModel {
-    @Column(name = "name", unique = true, nullable = false, length = 20)
+    @Column(name = "role", unique = true, nullable = false, length = 20)
     @Enumerated(STRING)
-    private RoleEnum name;
+    private RoleEnum role;
 }

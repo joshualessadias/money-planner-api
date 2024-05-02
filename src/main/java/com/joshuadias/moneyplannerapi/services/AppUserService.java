@@ -33,7 +33,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
     PropertyMap<AppUser, AppUserResponseDTO> mapEntityToResponseDTO = new PropertyMap<>() {
         @Override
         protected void configure() {
-            map().setRoles(source.getRoles().stream().map(Role::getName).toList());
+            map().setRoles(source.getRoles().stream().map(Role::getRole).toList());
         }
     };
 
