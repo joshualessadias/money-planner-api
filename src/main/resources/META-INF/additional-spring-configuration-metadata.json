@@ -4,6 +4,11 @@
       "name": "spring.application.title",
       "type": "java.lang.String",
       "description": "Application title for viewing."
+    },
+    {
+      "name": "security.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Secret for token encrypting."
     }
   ]
 }
