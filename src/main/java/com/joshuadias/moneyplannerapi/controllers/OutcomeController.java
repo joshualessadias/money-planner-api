@@ -16,7 +16,7 @@ import java.util.Date;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/outcome")
+@RequestMapping("/api/v1/outcome")
 public class OutcomeController {
     private final OutcomeService outcomeService;
 

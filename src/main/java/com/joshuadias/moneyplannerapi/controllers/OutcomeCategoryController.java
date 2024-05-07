@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/outcome-category")
+@RequestMapping("/api/v1/outcome-category")
 public class OutcomeCategoryController {
     private final OutcomeCategoryService outcomeCategoryService;
 
