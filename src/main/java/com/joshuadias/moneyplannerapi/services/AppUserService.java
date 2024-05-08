@@ -62,7 +62,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         return convertToSingleDTO(updatedAppUser, AppUserResponseDTO.class);
     }
 
-    public AppUser findByEmail(String email) {
+    public AppUser findByEmailOrThrow(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(MessageEnum.APP_USER_NOT_FOUND_WITH_EMAIL.getMessage()));
     }
@@ -99,5 +99,12 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
 
     public boolean existsByEmail(String email) {
         return repository.existsByEmail(email);
+    }
+
+    public AppUserResponseDTO getCurrentAppUser(String email) {
+        log.info(MessageEnum.APP_USER_FINDING_CURRENT.getMessage(email));
+        var appUser = findByEmailOrThrow(email);
+        log.info(MessageEnum.APP_USER_FOUND_CURRENT_BY_EMAIL.getMessage(appUser.getEmail()));
+        return convertToSingleDTO(appUser, AppUserResponseDTO.class);
     }
 }

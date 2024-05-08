@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -38,9 +40,13 @@ public class AppUserController {
         return new ResponseEntity<>(appUserService.getAllAppUsersPageable(filter), OK);
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<AppUserResponseDTO> getCurrentAppUser(Principal principal) {
+        return new ResponseEntity<>(appUserService.getCurrentAppUser(principal.getName()), OK);
+    }
+
     @PostMapping("/{id}/role/{roleId}")
-    @ResponseStatus(CREATED)
     public ResponseEntity<AppUserResponseDTO> addRole(@PathVariable Long id, @PathVariable Long roleId) {
-        return new ResponseEntity<>(appUserService.addRoleToAppUser(id, roleId), OK);
+        return new ResponseEntity<>(appUserService.addRoleToAppUser(id, roleId), CREATED);
     }
 }

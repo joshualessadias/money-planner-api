@@ -64,7 +64,7 @@ public class AuthenticationService {
                 request.getEmail(),
                 request.getPassword()
         ));
-        var appUser = appUserService.findByEmail(request.getEmail());
+        var appUser = appUserService.findByEmailOrThrow(request.getEmail());
         var jwtToken = jwtService.generateToken(appUser);
         return AuthenticationResponseDTO.builder().token(jwtToken).build();
     }

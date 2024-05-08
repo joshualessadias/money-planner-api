@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 public class AppUserResponseDTO {
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private List<RoleEnum> roles;
 }

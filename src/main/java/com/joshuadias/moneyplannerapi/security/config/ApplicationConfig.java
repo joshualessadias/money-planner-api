@@ -20,7 +20,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return appUserService::findByEmail;
+        return appUserService::findByEmailOrThrow;
     }
 
     @Bean
