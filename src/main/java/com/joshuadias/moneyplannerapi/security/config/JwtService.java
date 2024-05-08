@@ -23,7 +23,7 @@ public class JwtService {
     private static final int ACCESS_TOKEN_EXPIRATION_MINUTES = 30;
 
     @Value("${security.jwt.secret}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
     private Key getSigningKey() {
         var keyBytes = Decoders.BASE64.decode(SECRET_KEY);

@@ -1,7 +1,6 @@
 package com.joshuadias.moneyplannerapi.controllers;
 
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserFilterRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.AppUserResponseDTO;
 import com.joshuadias.moneyplannerapi.services.AppUserService;
 import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
@@ -37,12 +36,6 @@ public class AppUserController {
                 .orderBy(orderBy)
                 .build();
         return appUserService.getAllAppUsersPageable(filter);
-    }
-
-    @PostMapping
-    @ResponseStatus(CREATED)
-    public AppUserResponseDTO createAppUser(@RequestBody AppUserRequestDTO appUserRequest) {
-        return appUserService.createAppUser(appUserRequest);
     }
 
     @PostMapping("/{id}/role/{roleId}")

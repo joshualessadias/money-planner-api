@@ -1,7 +1,6 @@
 package com.joshuadias.moneyplannerapi.services;
 
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserFilterRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.AppUserResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
@@ -22,12 +21,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-import static com.joshuadias.moneyplannerapi.enums.RoleEnum.USER;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AppUserService extends AbstractServiceRepository<AppUserRepository, AppUser, Long> {
+
     private final RoleRepository roleRepository;
 
     PropertyMap<AppUser, AppUserResponseDTO> mapEntityToResponseDTO = new PropertyMap<>() {
@@ -36,24 +34,6 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
             map().setRoles(source.getRoles().stream().map(Role::getRole).toList());
         }
     };
-
-    private AppUser buildAppUserFromRequest(AppUserRequestDTO appUserRequest) {
-        var appUser = new AppUser();
-        appUser.setFirstName(appUserRequest.getFirstName());
-        appUser.setLastName(appUserRequest.getLastName());
-        appUser.setEmail(appUserRequest.getEmail());
-        appUser.setPassword(appUserRequest.getPassword());
-        return appUser;
-    }
-
-    @Transactional
-    public AppUserResponseDTO createAppUser(AppUserRequestDTO appUserRequest) {
-        log.info(MessageEnum.APP_USER_CREATING.getMessage());
-        var appUser = buildAppUserFromRequest(appUserRequest);
-        var createdAppUser = repository.save(appUser);
-        log.info(MessageEnum.APP_USER_CREATED_WITH_ID.getMessage(String.valueOf(appUser.getId())));
-        return addRoleToAppUser(createdAppUser.getId(), USER.getId());
-    }
 
     public AppUser findAppUserByIdOrThrow(Long appUserId) {
         return repository.findById(appUserId)
@@ -66,13 +46,19 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
     }
 
     @Transactional
-    public AppUserResponseDTO addRoleToAppUser(Long appUserId, Long roleId) {
+    public AppUser addRoleToAppUserNotConvertingToDto(Long appUserId, Long roleId) {
         log.info(MessageEnum.ADDING_ROLE_WITH_ID_TO_APP_USER_WITH_ID.getMessage(String.valueOf(roleId)));
         var appUser = findAppUserByIdOrThrow(appUserId);
         var role = findRoleByIdOrThrow(roleId);
         appUser.getRoles().add(role);
         var updatedAppUser = repository.save(appUser);
         log.info(MessageEnum.ROLE_ADDED_TO_APP_USER.getMessage());
+        return updatedAppUser;
+    }
+
+    @Transactional
+    public AppUserResponseDTO addRoleToAppUser(Long appUserId, Long roleId) {
+        var updatedAppUser = addRoleToAppUserNotConvertingToDto(appUserId, roleId);
         return convertToSingleDTO(updatedAppUser, AppUserResponseDTO.class);
     }
 
@@ -109,5 +95,9 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         var pageAppUsers = repository.findAll(spec, pageable);
         log.info(MessageEnum.APP_USER_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageAppUsers.getNumberOfElements())));
         return convertToPageDTO(pageAppUsers, AppUserResponseDTO.class, mapEntityToResponseDTO);
+    }
+
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
     }
 }

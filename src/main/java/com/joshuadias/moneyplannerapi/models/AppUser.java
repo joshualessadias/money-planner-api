@@ -31,7 +31,7 @@ public class AppUser extends BaseModel implements UserDetails {
     @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", nullable = false, length = 100)
     private String password;
 
     @ManyToMany(fetch = EAGER)
