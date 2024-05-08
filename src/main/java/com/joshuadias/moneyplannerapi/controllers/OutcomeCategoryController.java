@@ -8,10 +8,12 @@ import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,26 +22,23 @@ public class OutcomeCategoryController {
     private final OutcomeCategoryService outcomeCategoryService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createOutcome(@Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
+    public ResponseEntity<Void> createOutcome(@Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
         outcomeCategoryService.create(outcomeCategoryRequestDTO);
+        return new ResponseEntity<>(CREATED);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public OutcomeCategoryResponseDTO getOutcomeCategoryById(@PathVariable Long id) {
-        return outcomeCategoryService.getById(id);
+    public ResponseEntity<OutcomeCategoryResponseDTO> getOutcomeCategoryById(@PathVariable Long id) {
+        return new ResponseEntity<>(outcomeCategoryService.getById(id), OK);
     }
 
     @GetMapping("/all")
-    @ResponseStatus(HttpStatus.OK)
-    public List<OutcomeCategoryResponseDTO> getOutcomeCategoryList() {
-        return outcomeCategoryService.getAll();
+    public ResponseEntity<List<OutcomeCategoryResponseDTO>> getOutcomeCategoryList() {
+        return new ResponseEntity<>(outcomeCategoryService.getAll(), OK);
     }
 
     @GetMapping("/pageable")
-    @ResponseStatus(HttpStatus.OK)
-    public Page<OutcomeCategoryResponseDTO> getOutcomePageable(
+    public ResponseEntity<Page<OutcomeCategoryResponseDTO>> getOutcomePageable(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "orderBy", required = false) String orderBy,
@@ -55,15 +54,15 @@ public class OutcomeCategoryController {
                 .description(description)
                 .build();
 
-        return outcomeCategoryService.getAllPageable(outcomeCategoryFilter);
+        return new ResponseEntity<>(outcomeCategoryService.getAllPageable(outcomeCategoryFilter), OK);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateOutcomeCategory(
+    public ResponseEntity<Void> updateOutcomeCategory(
             @PathVariable Long id,
             @Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO
     ) {
         outcomeCategoryService.update(id, outcomeCategoryRequestDTO);
+        return new ResponseEntity<>(ACCEPTED);
     }
 }

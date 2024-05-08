@@ -6,6 +6,7 @@ import com.joshuadias.moneyplannerapi.services.AppUserService;
 import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -18,8 +19,7 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @GetMapping("/pageable")
-    @ResponseStatus(OK)
-    public Page<AppUserResponseDTO> getAppUserPageable(
+    public ResponseEntity<Page<AppUserResponseDTO>> getAppUserPageable(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "orderBy", required = false) String orderBy,
@@ -35,12 +35,12 @@ public class AppUserController {
                 .size(size)
                 .orderBy(orderBy)
                 .build();
-        return appUserService.getAllAppUsersPageable(filter);
+        return new ResponseEntity<>(appUserService.getAllAppUsersPageable(filter), OK);
     }
 
     @PostMapping("/{id}/role/{roleId}")
     @ResponseStatus(CREATED)
-    public AppUserResponseDTO addRole(@PathVariable Long id, @PathVariable Long roleId) {
-        return appUserService.addRoleToAppUser(id, roleId);
+    public ResponseEntity<AppUserResponseDTO> addRole(@PathVariable Long id, @PathVariable Long roleId) {
+        return new ResponseEntity<>(appUserService.addRoleToAppUser(id, roleId), OK);
     }
 }

@@ -8,11 +8,13 @@ import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+import static org.springframework.http.HttpStatus.*;
 
 @AllArgsConstructor
 @RestController
@@ -21,20 +23,18 @@ public class OutcomeController {
     private final OutcomeService outcomeService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createOutcome(@Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
+    public ResponseEntity<Void> createOutcome(@Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
         outcomeService.create(outcomeRequestDto);
+        return new ResponseEntity<>(CREATED);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public OutcomeResponseDTO getOutcomeById(@PathVariable Long id) {
-        return outcomeService.getById(id);
+    public ResponseEntity<OutcomeResponseDTO> getOutcomeById(@PathVariable Long id) {
+        return new ResponseEntity<>(outcomeService.getById(id), OK);
     }
 
     @GetMapping("/pageable")
-    @ResponseStatus(HttpStatus.OK)
-    public Page<OutcomeResponseDTO> getOutcomePageable(
+    public ResponseEntity<Page<OutcomeResponseDTO>> getOutcomePageable(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "orderBy", required = false) String orderBy,
@@ -62,18 +62,21 @@ public class OutcomeController {
                 .description(description)
                 .build();
 
-        return outcomeService.getAllPageable(outcomeFilter);
+        return new ResponseEntity<>(outcomeService.getAllPageable(outcomeFilter), OK);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateOutcome(@PathVariable Long id, @Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
+    public ResponseEntity<Void> updateOutcome(
+            @PathVariable Long id,
+            @Valid @RequestBody OutcomeRequestDTO outcomeRequestDto
+    ) {
         outcomeService.update(id, outcomeRequestDto);
+        return new ResponseEntity<>(ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOutcome(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOutcome(@PathVariable Long id) {
         outcomeService.delete(id);
+        return new ResponseEntity<>(NO_CONTENT);
     }
 }
