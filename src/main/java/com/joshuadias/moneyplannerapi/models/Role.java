@@ -22,4 +22,9 @@ public class Role extends BaseModel {
     @Column(name = "role", unique = true, nullable = false, length = 20)
     @Enumerated(STRING)
     private RoleEnum role;
+
+    @Override
+    public String toString() {
+        return role.name();
+    }
 }

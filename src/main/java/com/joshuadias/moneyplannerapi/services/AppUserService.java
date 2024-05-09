@@ -14,7 +14,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,6 @@ import java.util.ArrayList;
 public class AppUserService extends AbstractServiceRepository<AppUserRepository, AppUser, Long> {
 
     private final RoleRepository roleRepository;
-
-    PropertyMap<AppUser, AppUserResponseDTO> mapEntityToResponseDTO = new PropertyMap<>() {
-        @Override
-        protected void configure() {
-            map().setRoles(source.getRoles().stream().map(Role::getRole).toList());
-        }
-    };
 
     public AppUser findAppUserByIdOrThrow(Long appUserId) {
         return repository.findById(appUserId)
@@ -94,7 +86,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         var spec = generateSpecification(filter);
         var pageAppUsers = repository.findAll(spec, pageable);
         log.info(MessageEnum.APP_USER_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageAppUsers.getNumberOfElements())));
-        return convertToPageDTO(pageAppUsers, AppUserResponseDTO.class, mapEntityToResponseDTO);
+        return convertToPageDTO(pageAppUsers, AppUserResponseDTO.class);
     }
 
     public boolean existsByEmail(String email) {
@@ -105,6 +97,6 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         log.info(MessageEnum.APP_USER_FINDING_CURRENT.getMessage(email));
         var appUser = findByEmailOrThrow(email);
         log.info(MessageEnum.APP_USER_FOUND_CURRENT_BY_EMAIL.getMessage(appUser.getEmail()));
-        return convertToSingleDTO(appUser, AppUserResponseDTO.class, mapEntityToResponseDTO);
+        return convertToSingleDTO(appUser, AppUserResponseDTO.class);
     }
 }
