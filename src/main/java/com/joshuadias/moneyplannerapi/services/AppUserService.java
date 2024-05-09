@@ -105,6 +105,6 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
         log.info(MessageEnum.APP_USER_FINDING_CURRENT.getMessage(email));
         var appUser = findByEmailOrThrow(email);
         log.info(MessageEnum.APP_USER_FOUND_CURRENT_BY_EMAIL.getMessage(appUser.getEmail()));
-        return convertToSingleDTO(appUser, AppUserResponseDTO.class);
+        return convertToSingleDTO(appUser, AppUserResponseDTO.class, mapEntityToResponseDTO);
     }
 }

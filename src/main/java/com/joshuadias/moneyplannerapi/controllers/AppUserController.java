@@ -2,11 +2,13 @@ package com.joshuadias.moneyplannerapi.controllers;
 
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.AppUserResponseDTO;
+import com.joshuadias.moneyplannerapi.enums.RoleEnum;
 import com.joshuadias.moneyplannerapi.services.AppUserService;
 import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -45,6 +47,7 @@ public class AppUserController {
         return new ResponseEntity<>(appUserService.getCurrentAppUser(principal.getName()), OK);
     }
 
+    @Secured(RoleEnum.ADMIN_STR)
     @PostMapping("/{id}/role/{roleId}")
     public ResponseEntity<AppUserResponseDTO> addRole(@PathVariable Long id, @PathVariable Long roleId) {
         return new ResponseEntity<>(appUserService.addRoleToAppUser(id, roleId), CREATED);
