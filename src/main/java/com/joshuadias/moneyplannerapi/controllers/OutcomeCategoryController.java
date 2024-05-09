@@ -65,4 +65,10 @@ public class OutcomeCategoryController {
         outcomeCategoryService.update(id, outcomeCategoryRequestDTO);
         return new ResponseEntity<>(ACCEPTED);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOutcomeCategory(@PathVariable Long id) {
+        outcomeCategoryService.delete(id);
+        return new ResponseEntity<>(NO_CONTENT);
+    }
 }

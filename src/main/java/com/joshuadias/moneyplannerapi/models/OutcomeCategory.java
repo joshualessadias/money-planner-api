@@ -2,9 +2,12 @@ package com.joshuadias.moneyplannerapi.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 // Rent, Groceries, Utilities, etc.
 @Getter
@@ -17,4 +20,7 @@ public class OutcomeCategory extends BaseModel {
 
     @Column(name = "description", length = 255)
     private String description;
+
+    @OneToMany(mappedBy = "category")
+    private List<Outcome> outcomes;
 }

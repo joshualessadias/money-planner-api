@@ -89,7 +89,7 @@ public class OutcomeCategoryService
     }
 
     private Specification<OutcomeCategory> generateSpecification(OutcomeCategoryFilterRequestDTO outcomeCategoryFilter) {
-        return (root, query, criteriaBuilder) -> {
+        return (root, _, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(outcomeCategoryFilter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
@@ -106,11 +106,25 @@ public class OutcomeCategoryService
         return convertToPageDTO(pageOutcomeCategories, OutcomeCategoryResponseDTO.class);
     }
 
+    @Transactional
     public void update(Long id, OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
         log.info(MessageEnum.OUTCOME_CATEGORY_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
         var oldOutcomeCategory = findByIdOrThrow(id);
         setOutcomeCategoryParametersFromRequest(outcomeCategoryRequestDTO, oldOutcomeCategory);
         var updatedOutcome = save(oldOutcomeCategory);
         log.info(MessageEnum.OUTCOME_CATEGORY_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
+    }
+
+    private void handleOutcomesDetach(OutcomeCategory outcomeCategory) {
+        outcomeCategory.getOutcomes().forEach(outcome -> outcome.setCategory(null));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        log.info(MessageEnum.OUTCOME_CATEGORY_DELETING_WITH_ID.getMessage(String.valueOf(id)));
+        var outcomeCategoryFound = findByIdOrThrow(id);
+        handleOutcomesDetach(outcomeCategoryFound);
+        repository.delete(outcomeCategoryFound);
+        log.info(MessageEnum.OUTCOME_CATEGORY_DELETED_WITH_ID.getMessage(String.valueOf(id)));
     }
 }

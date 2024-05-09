@@ -29,6 +29,8 @@ public enum MessageEnum {
     OUTCOME_CATEGORY_FOUND_ALL_PAGEABLE("message.outcome.category.found.all.pageable"),
     OUTCOME_CATEGORY_UPDATING_WITH_ID("message.outcome.category.updating.with.id"),
     OUTCOME_CATEGORY_UPDATED_WITH_ID("message.outcome.category.updated.with.id"),
+    OUTCOME_CATEGORY_DELETING_WITH_ID("message.outcome.category.deleting.with.id"),
+    OUTCOME_CATEGORY_DELETED_WITH_ID("message.outcome.category.deleted.with.id"),
 
     PAYMENT_METHOD_NOT_FOUND_WITH_ID("message.payment.method.not.found.with.id"),
 
