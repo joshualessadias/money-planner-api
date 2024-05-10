@@ -23,7 +23,8 @@ CREATE TABLE bank
     id              bigint IDENTITY (1, 1) NOT NULL,
     created_at      datetime               NOT NULL,
     last_updated_at datetime,
-    name            varchar(255)           NOT NULL,
+    name varchar(100) NOT NULL,
+    code varchar(10)  NOT NULL,
     CONSTRAINT pk_bank PRIMARY KEY (id)
 )
 GO
@@ -59,9 +60,9 @@ CREATE TABLE payment_method
     id              bigint IDENTITY (1, 1) NOT NULL,
     created_at      datetime               NOT NULL,
     last_updated_at datetime,
-    name            varchar(255)           NOT NULL,
+    name varchar(100) NOT NULL,
     description     varchar(255),
-    code            varchar(255),
+    code varchar(10)  NOT NULL,
     CONSTRAINT pk_payment_method PRIMARY KEY (id)
 )
 GO
@@ -80,8 +81,24 @@ ALTER TABLE app_user
     ADD CONSTRAINT uc_app_user_email UNIQUE (email)
 GO
 
+ALTER TABLE bank
+    ADD CONSTRAINT uc_bank_code UNIQUE (code)
+GO
+
+ALTER TABLE bank
+    ADD CONSTRAINT uc_bank_name UNIQUE (name)
+GO
+
 ALTER TABLE outcome_category
     ADD CONSTRAINT uc_outcome_category_name UNIQUE (name)
+GO
+
+ALTER TABLE payment_method
+    ADD CONSTRAINT uc_payment_method_code UNIQUE (code)
+GO
+
+ALTER TABLE payment_method
+    ADD CONSTRAINT uc_payment_method_name UNIQUE (name)
 GO
 
 ALTER TABLE role
