@@ -41,6 +41,8 @@ public enum MessageEnum {
     PAYMENT_METHOD_FINDING_ALL("message.payment.method.finding.all"),
     PAYMENT_METHOD_FINDING_ALL_PAGEABLE("message.payment.method.finding.all.pageable"),
     PAYMENT_METHOD_FOUND_ALL_PAGEABLE("message.payment.method.found.all.pageable"),
+    PAYMENT_METHOD_UPDATING_WITH_ID("message.payment.method.updating.with.id"),
+    PAYMENT_METHOD_UPDATED_WITH_ID("message.payment.method.updated.with.id"),
 
     BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
 

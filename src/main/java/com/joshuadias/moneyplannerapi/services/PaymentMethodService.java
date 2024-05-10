@@ -103,4 +103,14 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
         log.info(MessageEnum.PAYMENT_METHOD_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageEntities.getNumberOfElements())));
         return convertToPageDTO(pageEntities, PaymentMethodResponseDTO.class);
     }
+
+    public PaymentMethodResponseDTO update(Long id, PaymentMethodRequestDTO request) {
+        log.info(MessageEnum.PAYMENT_METHOD_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
+        var oldEntity = findByIdOrThrow(id);
+        var updatedEntityWithoutId = buildEntityFromRequest(request);
+        updatedEntityWithoutId.setId(oldEntity.getId());
+        var updatedEntity = save(oldEntity);
+        log.info(MessageEnum.PAYMENT_METHOD_UPDATED_WITH_ID.getMessage(String.valueOf(updatedEntity.getId())));
+        return convertToSingleDTO(updatedEntity, PaymentMethodResponseDTO.class);
+    }
 }

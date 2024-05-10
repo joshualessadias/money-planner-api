@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -57,5 +56,13 @@ public class PaymentMethodController {
         filter.setDescription(description);
 
         return new ResponseEntity<>(service.getAllPageable(filter), OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PaymentMethodResponseDTO> update(
+            @PathVariable Long id,
+            @Valid @RequestBody PaymentMethodRequestDTO request
+    ) {
+        return new ResponseEntity<>(service.update(id, request), ACCEPTED);
     }
 }
