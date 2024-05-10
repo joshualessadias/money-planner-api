@@ -33,6 +33,10 @@ public enum MessageEnum {
     OUTCOME_CATEGORY_DELETED_WITH_ID("message.outcome.category.deleted.with.id"),
 
     PAYMENT_METHOD_NOT_FOUND_WITH_ID("message.payment.method.not.found.with.id"),
+    PAYMENT_METHOD_ALREADY_EXISTS_WITH_NAME("message.payment.method.already.exists.with.name"),
+    PAYMENT_METHOD_ALREADY_EXISTS_WITH_CODE("message.payment.method.already.exists.with.code"),
+    PAYMENT_METHOD_CREATING("message.payment.method.creating"),
+    PAYMENT_METHOD_CREATED_WITH_ID("message.payment.method.created.with.id"),
 
     BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
 
