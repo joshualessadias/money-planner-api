@@ -26,18 +26,8 @@ import java.util.List;
 public class OutcomeCategoryService
         extends AbstractServiceRepository<OutcomeCategoryRepository, OutcomeCategory, Long> {
 
-    private void setOutcomeCategoryParametersFromRequest(
-            OutcomeCategoryRequestDTO outcomeCategoryRequestDto,
-            OutcomeCategory outcomeCategory
-    ) {
-        outcomeCategory.setName(outcomeCategoryRequestDto.getName());
-        outcomeCategory.setDescription(outcomeCategoryRequestDto.getDescription());
-    }
-
-    private OutcomeCategory buildOutcomeCategoryFromRequest(OutcomeCategoryRequestDTO outcomeCategoryRequestDto) {
-        var outcomeCategory = new OutcomeCategory();
-        setOutcomeCategoryParametersFromRequest(outcomeCategoryRequestDto, outcomeCategory);
-        return outcomeCategory;
+    private OutcomeCategory buildEntityFromRequest(OutcomeCategoryRequestDTO outcomeCategoryRequestDto) {
+        return convertToSingleDTO(outcomeCategoryRequestDto, OutcomeCategory.class);
     }
 
     private void checkIfNameExists(String name) {
@@ -47,12 +37,13 @@ public class OutcomeCategoryService
     }
 
     @Transactional
-    public void create(OutcomeCategoryRequestDTO outcomeCategoryRequestDto) {
+    public OutcomeCategoryResponseDTO create(OutcomeCategoryRequestDTO outcomeCategoryRequestDto) {
         log.info(MessageEnum.OUTCOME_CATEGORY_CREATING.getMessage());
         checkIfNameExists(outcomeCategoryRequestDto.getName());
-        var outcomeCategory = buildOutcomeCategoryFromRequest(outcomeCategoryRequestDto);
+        var outcomeCategory = buildEntityFromRequest(outcomeCategoryRequestDto);
         var savedOutcomeCategory = save(outcomeCategory);
         log.info(MessageEnum.OUTCOME_CATEGORY_CREATED_WITH_ID.getMessage(String.valueOf(savedOutcomeCategory.getId())));
+        return convertToSingleDTO(savedOutcomeCategory, OutcomeCategoryResponseDTO.class);
     }
 
     public OutcomeCategory findByIdOrThrow(Long id) {
@@ -108,12 +99,14 @@ public class OutcomeCategoryService
     }
 
     @Transactional
-    public void update(Long id, OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
+    public OutcomeCategoryResponseDTO update(Long id, OutcomeCategoryRequestDTO request) {
         log.info(MessageEnum.OUTCOME_CATEGORY_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
-        var oldOutcomeCategory = findByIdOrThrow(id);
-        setOutcomeCategoryParametersFromRequest(outcomeCategoryRequestDTO, oldOutcomeCategory);
-        var updatedOutcome = save(oldOutcomeCategory);
-        log.info(MessageEnum.OUTCOME_CATEGORY_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
+        var oldEntity = findByIdOrThrow(id);
+        var updatedEntityWithoutId = buildEntityFromRequest(request);
+        updatedEntityWithoutId.setId(oldEntity.getId());
+        var updatedEntity = save(oldEntity);
+        log.info(MessageEnum.OUTCOME_CATEGORY_UPDATED_WITH_ID.getMessage(String.valueOf(updatedEntity.getId())));
+        return convertToSingleDTO(updatedEntity, OutcomeCategoryResponseDTO.class);
     }
 
     private void handleOutcomesDetach(OutcomeCategory outcomeCategory) {

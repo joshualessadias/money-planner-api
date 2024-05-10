@@ -22,9 +22,10 @@ public class OutcomeCategoryController {
     private final OutcomeCategoryService outcomeCategoryService;
 
     @PostMapping
-    public ResponseEntity<Void> createOutcome(@Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO) {
-        outcomeCategoryService.create(outcomeCategoryRequestDTO);
-        return new ResponseEntity<>(CREATED);
+    public ResponseEntity<OutcomeCategoryResponseDTO> createOutcome(
+            @Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO
+    ) {
+        return new ResponseEntity<>(outcomeCategoryService.create(outcomeCategoryRequestDTO), CREATED);
     }
 
     @GetMapping("/{id}")
@@ -57,12 +58,11 @@ public class OutcomeCategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateOutcomeCategory(
+    public ResponseEntity<OutcomeCategoryResponseDTO> updateOutcomeCategory(
             @PathVariable Long id,
             @Valid @RequestBody OutcomeCategoryRequestDTO outcomeCategoryRequestDTO
     ) {
-        outcomeCategoryService.update(id, outcomeCategoryRequestDTO);
-        return new ResponseEntity<>(ACCEPTED);
+        return new ResponseEntity<>(outcomeCategoryService.update(id, outcomeCategoryRequestDTO), ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
