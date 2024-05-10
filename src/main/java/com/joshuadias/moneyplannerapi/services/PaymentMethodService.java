@@ -113,4 +113,16 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
         log.info(MessageEnum.PAYMENT_METHOD_UPDATED_WITH_ID.getMessage(String.valueOf(updatedEntity.getId())));
         return convertToSingleDTO(updatedEntity, PaymentMethodResponseDTO.class);
     }
+
+    private void handleOutcomesDetach(PaymentMethod entity) {
+        entity.getOutcomes().forEach(outcome -> outcome.setCategory(null));
+    }
+
+    public void delete(Long id) {
+        log.info(MessageEnum.PAYMENT_METHOD_DELETING_WITH_ID.getMessage(String.valueOf(id)));
+        var entityFound = findByIdOrThrow(id);
+        handleOutcomesDetach(entityFound);
+        repository.delete(entityFound);
+        log.info(MessageEnum.PAYMENT_METHOD_DELETED_WITH_ID.getMessage(String.valueOf(id)));
+    }
 }

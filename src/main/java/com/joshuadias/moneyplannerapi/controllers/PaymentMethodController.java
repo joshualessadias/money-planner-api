@@ -65,4 +65,10 @@ public class PaymentMethodController {
     ) {
         return new ResponseEntity<>(service.update(id, request), ACCEPTED);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(NO_CONTENT);
+    }
 }
