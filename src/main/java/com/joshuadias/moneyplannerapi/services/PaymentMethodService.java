@@ -35,10 +35,7 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
     }
 
     private PaymentMethod buildEntityFromRequest(PaymentMethodRequestDTO request) {
-        var entity = new PaymentMethod();
-        entity.setName(request.getName());
-        entity.setCode(request.getCode());
-        return entity;
+        return convertToSingleDTO(request, PaymentMethod.class);
     }
 
     @Transactional
