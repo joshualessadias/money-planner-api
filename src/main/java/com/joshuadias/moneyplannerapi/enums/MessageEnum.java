@@ -37,6 +37,10 @@ public enum MessageEnum {
     PAYMENT_METHOD_ALREADY_EXISTS_WITH_CODE("message.payment.method.already.exists.with.code"),
     PAYMENT_METHOD_CREATING("message.payment.method.creating"),
     PAYMENT_METHOD_CREATED_WITH_ID("message.payment.method.created.with.id"),
+    PAYMENT_METHOD_FINDING_BY_ID("message.payment.method.finding.by.id"),
+    PAYMENT_METHOD_FINDING_ALL("message.payment.method.finding.all"),
+    PAYMENT_METHOD_FINDING_ALL_PAGEABLE("message.payment.method.finding.all.pageable"),
+    PAYMENT_METHOD_FOUND_ALL_PAGEABLE("message.payment.method.found.all.pageable"),
 
     BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
 

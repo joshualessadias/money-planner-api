@@ -1,17 +1,20 @@
 package com.joshuadias.moneyplannerapi.controllers;
 
+import com.joshuadias.moneyplannerapi.dto.requests.paymentMethod.PaymentMethodFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.paymentMethod.PaymentMethodRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.PaymentMethodResponseDTO;
 import com.joshuadias.moneyplannerapi.services.PaymentMethodService;
+import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,5 +26,36 @@ public class PaymentMethodController {
     @PostMapping
     public ResponseEntity<PaymentMethodResponseDTO> create(@Valid @RequestBody PaymentMethodRequestDTO request) {
         return new ResponseEntity<>(service.create(request), CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PaymentMethodResponseDTO> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(service.getById(id), OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PaymentMethodResponseDTO>> getList() {
+        return new ResponseEntity<>(service.getAll(), OK);
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<PaymentMethodResponseDTO>> getOutcomePageable(
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer size,
+            @RequestParam(name = "orderBy", required = false) String orderBy,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "code", required = false) String code,
+            @RequestParam(name = "description", required = false) String description
+    ) {
+        OrderByUtils.validateOrderBy(orderBy);
+        var filter = new PaymentMethodFilterRequestDTO();
+        filter.setPage(page);
+        filter.setSize(size);
+        filter.setOrderBy(orderBy);
+        filter.setName(name);
+        filter.setCode(code);
+        filter.setDescription(description);
+
+        return new ResponseEntity<>(service.getAllPageable(filter), OK);
     }
 }

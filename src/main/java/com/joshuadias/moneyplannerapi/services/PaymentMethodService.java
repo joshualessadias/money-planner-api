@@ -1,6 +1,7 @@
 package com.joshuadias.moneyplannerapi.services;
 
 import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
+import com.joshuadias.moneyplannerapi.dto.requests.paymentMethod.PaymentMethodFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.paymentMethod.PaymentMethodRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.PaymentMethodResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
@@ -8,10 +9,18 @@ import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.PaymentMethod;
 import com.joshuadias.moneyplannerapi.repositories.PaymentMethodRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -46,5 +55,52 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
         var savedEntity = save(entity);
         log.info(MessageEnum.PAYMENT_METHOD_CREATED_WITH_ID.getMessage(String.valueOf(savedEntity.getId())));
         return convertToSingleDTO(entity, PaymentMethodResponseDTO.class);
+    }
+
+    public PaymentMethodResponseDTO getById(Long id) {
+        log.info(MessageEnum.PAYMENT_METHOD_FINDING_BY_ID.getMessage(String.valueOf(id)));
+        var entity = findByIdOrThrow(id);
+        return convertToSingleDTO(entity, PaymentMethodResponseDTO.class);
+    }
+
+    public List<PaymentMethodResponseDTO> getAll() {
+        log.info(MessageEnum.PAYMENT_METHOD_FINDING_ALL.getMessage());
+        var entities = repository.findAll();
+        return convertToListDTO(entities, PaymentMethodResponseDTO.class);
+    }
+
+    private void addPredicates(
+            PaymentMethodFilterRequestDTO filter,
+            ArrayList<Predicate> predicates,
+            CriteriaBuilder criteriaBuilder,
+            Root<PaymentMethod> from
+    ) {
+        if (filter.getName() != null) {
+            predicates.add(criteriaBuilder.like(from.get("name"), "%" + filter.getName() + "%"));
+        }
+        if (filter.getDescription() != null) {
+            predicates.add(criteriaBuilder.like(
+                    from.get("description"),
+                    "%" + filter.getDescription() + "%"
+            ));
+        }
+    }
+
+    private Specification<PaymentMethod> generateSpecification(PaymentMethodFilterRequestDTO filter) {
+        return (root, _, criteriaBuilder) -> {
+            var predicates = new ArrayList<Predicate>();
+            addPredicates(filter, predicates, criteriaBuilder, root);
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public Page<PaymentMethodResponseDTO> getAllPageable(PaymentMethodFilterRequestDTO filter) {
+        log.info(MessageEnum.PAYMENT_METHOD_FINDING_ALL_PAGEABLE.getMessage());
+        var sort = getSorting(filter.getOrderBy());
+        var pageable = generatePageable(filter.getPage(), filter.getSize(), sort);
+        var spec = generateSpecification(filter);
+        var pageEntities = repository.findAll(spec, pageable);
+        log.info(MessageEnum.PAYMENT_METHOD_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageEntities.getNumberOfElements())));
+        return convertToPageDTO(pageEntities, PaymentMethodResponseDTO.class);
     }
 }
