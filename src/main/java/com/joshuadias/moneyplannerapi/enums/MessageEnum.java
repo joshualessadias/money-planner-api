@@ -47,6 +47,18 @@ public enum MessageEnum {
     PAYMENT_METHOD_DELETED_WITH_ID("message.payment.method.deleted.with.id"),
 
     BANK_NOT_FOUND_WITH_ID("message.bank.not.found.with.id"),
+    BANK_ALREADY_EXISTS_WITH_NAME("message.bank.already.exists.with.name"),
+    BANK_ALREADY_EXISTS_WITH_CODE("message.bank.already.exists.with.code"),
+    BANK_CREATING("message.bank.creating"),
+    BANK_CREATED_WITH_ID("message.bank.created.with.id"),
+    BANK_FINDING_BY_ID("message.bank.finding.by.id"),
+    BANK_FINDING_ALL("message.bank.finding.all"),
+    BANK_FINDING_ALL_PAGEABLE("message.bank.finding.all.pageable"),
+    BANK_FOUND_ALL_PAGEABLE("message.bank.found.all.pageable"),
+    BANK_UPDATING_WITH_ID("message.bank.updating.with.id"),
+    BANK_UPDATED_WITH_ID("message.bank.updated.with.id"),
+    BANK_DELETING_WITH_ID("message.bank.deleting.with.id"),
+    BANK_DELETED_WITH_ID("message.bank.deleted.with.id"),
 
     ORDER_BY_VALIDATION_ERROR("message.order.by.validation.error"),
 

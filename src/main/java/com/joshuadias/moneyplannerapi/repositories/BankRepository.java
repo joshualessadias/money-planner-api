@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BankRepository extends GenericRepository<Bank, Long> {
+    Boolean existsByName(String name);
+
+    Boolean existsByCode(String code);
 }
