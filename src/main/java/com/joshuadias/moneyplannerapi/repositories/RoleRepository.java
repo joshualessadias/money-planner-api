@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.repositories;
 
+import com.joshuadias.moneyplannerapi.base.GenericRepository;
 import com.joshuadias.moneyplannerapi.models.Role;
 import org.springframework.stereotype.Repository;
 

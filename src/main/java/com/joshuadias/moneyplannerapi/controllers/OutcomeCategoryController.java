@@ -46,15 +46,14 @@ public class OutcomeCategoryController {
             @RequestParam(name = "description", required = false) String description
     ) {
         OrderByUtils.validateOrderBy(orderBy);
-        var outcomeCategoryFilter = OutcomeCategoryFilterRequestDTO.builder()
-                .page(page)
-                .size(size)
-                .orderBy(orderBy)
-                .name(name)
-                .description(description)
-                .build();
+        var filter = new OutcomeCategoryFilterRequestDTO();
+        filter.setPage(page);
+        filter.setSize(size);
+        filter.setOrderBy(orderBy);
+        filter.setName(name);
+        filter.setDescription(description);
 
-        return new ResponseEntity<>(outcomeCategoryService.getAllPageable(outcomeCategoryFilter), OK);
+        return new ResponseEntity<>(outcomeCategoryService.getAllPageable(filter), OK);
     }
 
     @PutMapping("/{id}")

@@ -1,14 +1,12 @@
 package com.joshuadias.moneyplannerapi.dto.requests.appUser;
 
-import lombok.Builder;
-import lombok.Data;
+import com.joshuadias.moneyplannerapi.base.BaseFilter;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@Builder
-public class AppUserFilterRequestDTO {
-    private String orderBy;
-    private Integer page;
-    private Integer size;
+@Getter
+@Setter
+public class AppUserFilterRequestDTO extends BaseFilter {
     private String name;
     private String email;
 }

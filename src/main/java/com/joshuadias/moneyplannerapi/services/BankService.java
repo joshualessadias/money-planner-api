@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.services;
 
+import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.Bank;

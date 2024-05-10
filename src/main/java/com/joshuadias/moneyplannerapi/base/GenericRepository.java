@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.repositories;
+package com.joshuadias.moneyplannerapi.base;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

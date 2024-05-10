@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.models;
 
+import com.joshuadias.moneyplannerapi.base.BaseModel;
 import com.joshuadias.moneyplannerapi.enums.RoleEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

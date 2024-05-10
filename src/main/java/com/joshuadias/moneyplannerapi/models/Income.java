@@ -1,5 +1,7 @@
 package com.joshuadias.moneyplannerapi.models;
 
+import com.joshuadias.moneyplannerapi.base.BaseModel;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

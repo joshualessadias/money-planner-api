@@ -1,17 +1,15 @@
 package com.joshuadias.moneyplannerapi.dto.requests.outcome;
 
-import lombok.Builder;
+import com.joshuadias.moneyplannerapi.base.BaseFilter;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Builder
+@Setter
 @Getter
-public class OutcomeFilterRequestDTO {
-    private Integer page;
-    private Integer size;
-    private String orderBy;
+public class OutcomeFilterRequestDTO extends BaseFilter {
     private Long categoryId;
     private Long paymentMethodId;
     private Long bankId;

@@ -1,6 +1,5 @@
-package com.joshuadias.moneyplannerapi.services;
+package com.joshuadias.moneyplannerapi.base;
 
-import com.joshuadias.moneyplannerapi.repositories.GenericRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;

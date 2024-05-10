@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.models;
+package com.joshuadias.moneyplannerapi.base;
 
 import jakarta.persistence.*;
 import lombok.Getter;

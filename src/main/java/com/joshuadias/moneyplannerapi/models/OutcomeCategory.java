@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.models;
 
+import com.joshuadias.moneyplannerapi.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;

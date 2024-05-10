@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.services;
+package com.joshuadias.moneyplannerapi.base;
 
 import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
 import jakarta.persistence.EntityManager;

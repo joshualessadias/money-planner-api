@@ -1,14 +1,12 @@
 package com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory;
 
-import lombok.Builder;
+import com.joshuadias.moneyplannerapi.base.BaseFilter;
 import lombok.Getter;
+import lombok.Setter;
 
-@Builder
+@Setter
 @Getter
-public class OutcomeCategoryFilterRequestDTO {
-    private Integer page;
-    private Integer size;
-    private String orderBy;
+public class OutcomeCategoryFilterRequestDTO extends BaseFilter {
     private String name;
     private String description;
 }

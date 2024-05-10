@@ -31,14 +31,13 @@ public class AppUserController {
             @RequestParam(name = "email", required = false) String email
     ) {
         OrderByUtils.validateOrderBy(orderBy);
-        var filter = AppUserFilterRequestDTO
-                .builder()
-                .email(email)
-                .name(name)
-                .page(page)
-                .size(size)
-                .orderBy(orderBy)
-                .build();
+        var filter = new AppUserFilterRequestDTO();
+        filter.setEmail(email);
+        filter.setName(name);
+        filter.setPage(page);
+        filter.setSize(size);
+        filter.setOrderBy(orderBy);
+
         return new ResponseEntity<>(appUserService.getAllAppUsersPageable(filter), OK);
     }
 

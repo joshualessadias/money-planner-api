@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.services;
 
+import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory.OutcomeCategoryFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory.OutcomeCategoryRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeCategoryResponseDTO;

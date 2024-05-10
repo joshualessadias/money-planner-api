@@ -48,21 +48,20 @@ public class OutcomeController {
             @RequestParam(name = "description", required = false) String description
     ) {
         OrderByUtils.validateOrderBy(orderBy);
-        var outcomeFilter = OutcomeFilterRequestDTO.builder()
-                .page(page)
-                .size(size)
-                .orderBy(orderBy)
-                .categoryId(categoryId)
-                .paymentMethodId(paymentMethodId)
-                .bankId(bankId)
-                .initialDate(initialDate == null ? null : new Date(initialDate))
-                .finalDate(finalDate == null ? null : new Date(finalDate))
-                .initialValue(initialValue)
-                .finalValue(finalValue)
-                .description(description)
-                .build();
+        var filter = new OutcomeFilterRequestDTO();
+        filter.setPage(page);
+        filter.setSize(size);
+        filter.setOrderBy(orderBy);
+        filter.setCategoryId(categoryId);
+        filter.setPaymentMethodId(paymentMethodId);
+        filter.setBankId(bankId);
+        filter.setInitialDate(initialDate == null ? null : new Date(initialDate));
+        filter.setFinalDate(finalDate == null ? null : new Date(finalDate));
+        filter.setInitialValue(initialValue);
+        filter.setFinalValue(finalValue);
+        filter.setDescription(description);
 
-        return new ResponseEntity<>(outcomeService.getAllPageable(outcomeFilter), OK);
+        return new ResponseEntity<>(outcomeService.getAllPageable(filter), OK);
     }
 
     @PutMapping("/{id}")

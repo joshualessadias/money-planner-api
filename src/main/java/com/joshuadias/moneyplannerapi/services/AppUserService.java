@@ -1,5 +1,6 @@
 package com.joshuadias.moneyplannerapi.services;
 
+import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.AppUserResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
