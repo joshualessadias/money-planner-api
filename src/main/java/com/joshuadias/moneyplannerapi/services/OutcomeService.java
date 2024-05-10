@@ -54,11 +54,12 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     }
 
     @Transactional
-    public void create(OutcomeRequestDTO outcomeRequestDto) {
+    public OutcomeResponseDTO create(OutcomeRequestDTO outcomeRequestDto) {
         log.info(MessageEnum.OUTCOME_CREATING.getMessage());
         var outcome = buildOutcomeFromRequest(outcomeRequestDto);
         var createdOutcome = save(outcome);
         log.info(MessageEnum.OUTCOME_CREATED_WITH_ID.getMessage(String.valueOf(createdOutcome.getId())));
+        return convertToSingleDTO(createdOutcome, OutcomeResponseDTO.class);
     }
 
     private Outcome findByIdOrThrow(Long id) {
@@ -68,12 +69,13 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     }
 
     @Transactional
-    public void update(Long id, OutcomeRequestDTO outcomeRequestDTO) {
+    public OutcomeResponseDTO update(Long id, OutcomeRequestDTO outcomeRequestDTO) {
         log.info(MessageEnum.OUTCOME_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
         var oldOutcome = findByIdOrThrow(id);
         setOutcomeParametersFromRequest(outcomeRequestDTO, oldOutcome);
         var updatedOutcome = save(oldOutcome);
         log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
+        return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
     }
 
     @Transactional

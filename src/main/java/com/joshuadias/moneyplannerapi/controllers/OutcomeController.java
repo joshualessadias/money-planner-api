@@ -23,9 +23,8 @@ public class OutcomeController {
     private final OutcomeService outcomeService;
 
     @PostMapping
-    public ResponseEntity<Void> createOutcome(@Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
-        outcomeService.create(outcomeRequestDto);
-        return new ResponseEntity<>(CREATED);
+    public ResponseEntity<OutcomeResponseDTO> createOutcome(@Valid @RequestBody OutcomeRequestDTO outcomeRequestDto) {
+        return new ResponseEntity<>(outcomeService.create(outcomeRequestDto), CREATED);
     }
 
     @GetMapping("/{id}")
@@ -65,12 +64,11 @@ public class OutcomeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateOutcome(
+    public ResponseEntity<OutcomeResponseDTO> updateOutcome(
             @PathVariable Long id,
             @Valid @RequestBody OutcomeRequestDTO outcomeRequestDto
     ) {
-        outcomeService.update(id, outcomeRequestDto);
-        return new ResponseEntity<>(ACCEPTED);
+        return new ResponseEntity<>(outcomeService.update(id, outcomeRequestDto), ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
