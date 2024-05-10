@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.dto.requests.outcome;
+package com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory;
 
 import lombok.Builder;
 import lombok.Getter;

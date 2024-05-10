@@ -1,7 +1,7 @@
 package com.joshuadias.moneyplannerapi.controllers;
 
-import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeCategoryFilterRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeCategoryRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory.OutcomeCategoryFilterRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory.OutcomeCategoryRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeCategoryResponseDTO;
 import com.joshuadias.moneyplannerapi.services.OutcomeCategoryService;
 import com.joshuadias.moneyplannerapi.utils.OrderByUtils;

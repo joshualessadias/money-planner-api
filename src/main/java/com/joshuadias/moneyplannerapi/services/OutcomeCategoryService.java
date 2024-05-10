@@ -1,7 +1,7 @@
 package com.joshuadias.moneyplannerapi.services;
 
-import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeCategoryFilterRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeCategoryRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory.OutcomeCategoryFilterRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.requests.outcomeCategory.OutcomeCategoryRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeCategoryResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
