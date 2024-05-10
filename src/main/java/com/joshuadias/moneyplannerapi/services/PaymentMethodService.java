@@ -84,6 +84,9 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
                     "%" + filter.getDescription() + "%"
             ));
         }
+        if (filter.getCode() != null) {
+            predicates.add(criteriaBuilder.like(from.get("code"), "%" + filter.getCode() + "%"));
+        }
     }
 
     private Specification<PaymentMethod> generateSpecification(PaymentMethodFilterRequestDTO filter) {
