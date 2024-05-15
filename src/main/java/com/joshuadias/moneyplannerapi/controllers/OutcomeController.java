@@ -44,7 +44,8 @@ public class OutcomeController {
             @RequestParam(name = "finalDate", required = false) Long finalDate,
             @RequestParam(name = "initialValue", required = false) BigDecimal initialValue,
             @RequestParam(name = "finalValue", required = false) BigDecimal finalValue,
-            @RequestParam(name = "description", required = false) String description
+            @RequestParam(name = "description", required = false) String description,
+            @RequestParam(name = "findAll", defaultValue = "0") Boolean findAll
     ) {
         OrderByUtils.validateOrderBy(orderBy);
         var filter = new OutcomeFilterRequestDTO();
@@ -59,6 +60,7 @@ public class OutcomeController {
         filter.setInitialValue(initialValue);
         filter.setFinalValue(finalValue);
         filter.setDescription(description);
+        filter.setFindAll(findAll);
 
         return new ResponseEntity<>(outcomeService.getAllPageable(filter), OK);
     }

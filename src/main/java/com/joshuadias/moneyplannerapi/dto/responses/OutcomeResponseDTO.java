@@ -10,7 +10,7 @@ public class OutcomeResponseDTO {
     private String description;
     private BigDecimal value;
     private String date;
-    private Long categoryId;
-    private Long paymentMethodId;
-    private Long bankId;
+    private OutcomeCategoryResponseDTO category;
+    private PaymentMethodResponseDTO paymentMethod;
+    private BankResponseDTO bank;
 }

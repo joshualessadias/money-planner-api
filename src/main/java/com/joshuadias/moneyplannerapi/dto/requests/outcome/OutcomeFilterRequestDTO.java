@@ -18,4 +18,5 @@ public class OutcomeFilterRequestDTO extends BaseFilter {
     private BigDecimal initialValue;
     private BigDecimal finalValue;
     private String description;
+    private Boolean findAll;
 }

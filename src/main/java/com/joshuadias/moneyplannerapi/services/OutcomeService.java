@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -201,9 +202,14 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     public Page<OutcomeResponseDTO> getAllPageable(OutcomeFilterRequestDTO outcomeFilter) {
         log.info(MessageEnum.OUTCOME_FINDING_ALL_PAGEABLE.getMessage());
         var sort = getSorting(outcomeFilter.getOrderBy());
-        var pageable = generatePageable(outcomeFilter.getPage(), outcomeFilter.getSize(), sort);
         var spec = generateSpecification(outcomeFilter);
-        var pageOutcomes = repository.findAll(spec, pageable);
+        Page<Outcome> pageOutcomes;
+        if (outcomeFilter.getFindAll()) {
+            pageOutcomes = repository.findAll(spec, Pageable.unpaged(sort));
+        } else {
+            var pageable = generatePageable(outcomeFilter.getPage(), outcomeFilter.getSize(), sort);
+            pageOutcomes = repository.findAll(spec, pageable);
+        }
         log.info(MessageEnum.OUTCOME_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageOutcomes.getNumberOfElements())));
         return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class);
     }
