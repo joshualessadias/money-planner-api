@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -32,21 +33,21 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     private final PaymentMethodService paymentMethodService;
     private final BankService bankService;
 
-    private void setOutcomeParametersFromRequest(OutcomeRequestDTO outcomeRequestDto, Outcome outcome) {
-        outcome.setDescription(outcomeRequestDto.getDescription());
-        outcome.setValue(outcomeRequestDto.getValue());
-        outcome.setDate(new Date(outcomeRequestDto.getDate()));
-        if (outcomeRequestDto.getCategoryId() != null) {
-            var category = categoryService.findByIdOrThrow(outcomeRequestDto.getCategoryId());
-            outcome.setCategory(category);
+    private void setOutcomeParametersFromRequest(OutcomeRequestDTO request, Outcome entity) {
+        entity.setDescription(request.getDescription());
+        entity.setValue(request.getValue());
+        entity.setDate(new Date(request.getDate()));
+        if (request.getCategoryId() != null) {
+            var category = categoryService.findByIdOrThrow(request.getCategoryId());
+            entity.setCategory(category);
         }
-        if (outcomeRequestDto.getPaymentMethodId() != null) {
-            var paymentMethod = paymentMethodService.findByIdOrThrow(outcomeRequestDto.getPaymentMethodId());
-            outcome.setPaymentMethod(paymentMethod);
+        if (request.getPaymentMethodId() != null) {
+            var paymentMethod = paymentMethodService.findByIdOrThrow(request.getPaymentMethodId());
+            entity.setPaymentMethod(paymentMethod);
         }
-        if (outcomeRequestDto.getBankId() != null) {
-            var bank = bankService.findByIdOrThrow(outcomeRequestDto.getBankId());
-            outcome.setBank(bank);
+        if (request.getBankId() != null) {
+            var bank = bankService.findByIdOrThrow(request.getBankId());
+            entity.setBank(bank);
         }
     }
 
@@ -96,14 +97,63 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
                         id))));
     }
 
+    private List<Outcome> findChildrenById(Long id) {
+        return repository.findByInstallmentParentId(id);
+    }
+
+    private void setParameterForInstallmentsOutcome(OutcomeRequestDTO request, Outcome entity, Date parentDate) {
+        var OUTCOME_WITH_INSTALLMENTS_REGEX = ".*( - (\\d+)/(\\d+))$";
+        var ENTIRE_SUFFIX_PART = 1;
+        var INSTALLMENT_NUMBER_PART = 2;
+
+        var regexPattern = Pattern.compile(OUTCOME_WITH_INSTALLMENTS_REGEX);
+        var matcher = regexPattern.matcher(entity.getDescription());
+        if (matcher.find()) {
+            var entireSuffix = matcher.group(ENTIRE_SUFFIX_PART);
+            var installmentNumber = Integer.parseInt(matcher.group(INSTALLMENT_NUMBER_PART));
+
+            entity.setDescription(request.getDescription() + entireSuffix);
+            entity.setDate(DateUtils.addMonthsToDate(parentDate, installmentNumber - 1));
+        } else {
+            entity.setDescription(request.getDescription());
+            entity.setDate(new Date(request.getDate()));
+        }
+        entity.setValue(request.getValue());
+        if (request.getCategoryId() != null) {
+            var category = categoryService.findByIdOrThrow(request.getCategoryId());
+            entity.setCategory(category);
+        }
+        if (request.getPaymentMethodId() != null) {
+            var paymentMethod = paymentMethodService.findByIdOrThrow(request.getPaymentMethodId());
+            entity.setPaymentMethod(paymentMethod);
+        }
+        if (request.getBankId() != null) {
+            var bank = bankService.findByIdOrThrow(request.getBankId());
+            entity.setBank(bank);
+        }
+    }
+
     @Transactional
-    public OutcomeResponseDTO update(Long id, OutcomeRequestDTO outcomeRequestDTO) {
+    public OutcomeResponseDTO update(Long id, OutcomeRequestDTO request) {
         log.info(MessageEnum.OUTCOME_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
         var oldOutcome = findByIdOrThrow(id);
-        setOutcomeParametersFromRequest(outcomeRequestDTO, oldOutcome);
-        var updatedOutcome = save(oldOutcome);
-        log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
-        return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
+        var childrenOutcomes = findChildrenById(id);
+        if (!childrenOutcomes.isEmpty()) {
+            setParameterForInstallmentsOutcome(request, oldOutcome, new Date(request.getDate()));
+            var updatedOutcome = repository.save(oldOutcome);
+            log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(oldOutcome.getId())));
+            for (var child : childrenOutcomes) {
+                setParameterForInstallmentsOutcome(request, child, updatedOutcome.getDate());
+                repository.save(child);
+                log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(child.getId())));
+            }
+            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
+        } else {
+            setOutcomeParametersFromRequest(request, oldOutcome);
+            var updatedOutcome = save(oldOutcome);
+            log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
+            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
+        }
     }
 
     @Transactional
@@ -161,6 +211,11 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     public void delete(Long id) {
         log.info(MessageEnum.OUTCOME_DELETING_WITH_ID.getMessage(String.valueOf(id)));
         var outcome = findByIdOrThrow(id);
+        var childrenOutcomes = findChildrenById(id);
+        for (var child : childrenOutcomes) {
+            repository.delete(child);
+            log.info(MessageEnum.OUTCOME_DELETED_WITH_ID.getMessage(String.valueOf(child.getId())));
+        }
         repository.delete(outcome);
         log.info(MessageEnum.OUTCOME_DELETED_WITH_ID.getMessage(String.valueOf(id)));
     }
