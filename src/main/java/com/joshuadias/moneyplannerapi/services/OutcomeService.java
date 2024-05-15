@@ -8,6 +8,7 @@ import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.Outcome;
 import com.joshuadias.moneyplannerapi.repositories.OutcomeRepository;
+import com.joshuadias.moneyplannerapi.utils.DateUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -20,16 +21,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OutcomeService extends AbstractServiceRepository<OutcomeRepository, Outcome, Long> {
+
     private final OutcomeCategoryService categoryService;
     private final PaymentMethodService paymentMethodService;
     private final BankService bankService;
 
     private void setOutcomeParametersFromRequest(OutcomeRequestDTO outcomeRequestDto, Outcome outcome) {
+        outcome.setDescription(outcomeRequestDto.getDescription());
+        outcome.setValue(outcomeRequestDto.getValue());
+        outcome.setDate(new Date(outcomeRequestDto.getDate()));
         if (outcomeRequestDto.getCategoryId() != null) {
             var category = categoryService.findByIdOrThrow(outcomeRequestDto.getCategoryId());
             outcome.setCategory(category);
@@ -42,9 +48,6 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
             var bank = bankService.findByIdOrThrow(outcomeRequestDto.getBankId());
             outcome.setBank(bank);
         }
-        outcome.setDescription(outcomeRequestDto.getDescription());
-        outcome.setValue(outcomeRequestDto.getValue());
-        outcome.setDate(new Date(outcomeRequestDto.getDate()));
     }
 
     private Outcome buildOutcomeFromRequest(OutcomeRequestDTO outcomeRequestDto) {
@@ -53,13 +56,38 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         return outcome;
     }
 
+    private List<Outcome> createMultipleInstallmentsOutcomes(OutcomeRequestDTO outcomeRequestDto) {
+        var outcomes = new ArrayList<Outcome>();
+        for (int i = 1; i <= outcomeRequestDto.getInstallments(); i++) {
+            var outcome = buildOutcomeFromRequest(outcomeRequestDto);
+            outcome.setDescription(String.format(
+                    "%s - %d/%d",
+                    outcome.getDescription(),
+                    i,
+                    outcomeRequestDto.getInstallments()
+            ));
+            var installmentDate = DateUtils.addMonthsToDate(outcome.getDate(), i - 1);
+            outcome.setDate(installmentDate);
+            if (i > 1)
+                outcome.setInstallmentParent(outcomes.getFirst());
+            outcomes.add(outcome);
+        }
+        return repository.saveAll(outcomes);
+    }
+
     @Transactional
-    public OutcomeResponseDTO create(OutcomeRequestDTO outcomeRequestDto) {
+    public OutcomeResponseDTO create(OutcomeRequestDTO request) {
         log.info(MessageEnum.OUTCOME_CREATING.getMessage());
-        var outcome = buildOutcomeFromRequest(outcomeRequestDto);
-        var createdOutcome = save(outcome);
-        log.info(MessageEnum.OUTCOME_CREATED_WITH_ID.getMessage(String.valueOf(createdOutcome.getId())));
-        return convertToSingleDTO(createdOutcome, OutcomeResponseDTO.class);
+        if (request.getInstallments() != null && request.getInstallments() > 1) {
+            var outcomes = createMultipleInstallmentsOutcomes(request);
+            log.info(MessageEnum.OUTCOME_CREATED_MULTIPLE.getMessage(String.valueOf(request.getInstallments())));
+            return convertToSingleDTO(outcomes.getFirst(), OutcomeResponseDTO.class);
+        } else {
+            var outcome = buildOutcomeFromRequest(request);
+            var createdOutcome = save(outcome);
+            log.info(MessageEnum.OUTCOME_CREATED_WITH_ID.getMessage(String.valueOf(createdOutcome.getId())));
+            return convertToSingleDTO(createdOutcome, OutcomeResponseDTO.class);
+        }
     }
 
     private Outcome findByIdOrThrow(Long id) {
@@ -113,7 +141,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     }
 
     private Specification<Outcome> generateSpecification(OutcomeFilterRequestDTO outcomeFilter) {
-        return (root, query, criteriaBuilder) -> {
+        return (root, _, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(outcomeFilter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

@@ -18,6 +18,7 @@ public enum MessageEnum {
     OUTCOME_FOUND_ALL_PAGEABLE("message.outcome.found.all.pageable"),
     OUTCOME_DELETING_WITH_ID("message.outcome.deleting.with.id"),
     OUTCOME_DELETED_WITH_ID("message.outcome.deleted.with.id"),
+    OUTCOME_CREATED_MULTIPLE("message.outcome.created.multiple"),
 
     OUTCOME_CATEGORY_NOT_FOUND_WITH_ID("message.outcome.category.not.found.with.id"),
     OUTCOME_CATEGORY_CREATING("message.outcome.category.creating"),

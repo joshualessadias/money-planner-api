@@ -33,4 +33,8 @@ public class Outcome extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "bank_id")
     private Bank bank;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "installment_parent_id")
+    private Outcome installmentParent;
 }
