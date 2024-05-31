@@ -9,7 +9,7 @@ public class OutcomeResponseDTO {
     private Long id;
     private String description;
     private BigDecimal value;
-    private String date;
+    private Long date;
     private OutcomeCategoryResponseDTO category;
     private PaymentMethodResponseDTO paymentMethod;
     private BankResponseDTO bank;
