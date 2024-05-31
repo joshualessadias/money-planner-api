@@ -126,6 +126,32 @@
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>cz.habarta.typescript-generator</groupId>
+                <artifactId>typescript-generator-maven-plugin</artifactId>
+                <version>3.2.1263</version>
+                <executions>
+                    <execution>
+                        <?m2e ignore?>
+                        <id>generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jsonLibrary>jackson2</jsonLibrary>
+                    <outputKind>module</outputKind>
+                    <classPatterns>
+                        <pattern>com.joshuadias.moneyplannerapi.dto.**DTO</pattern>
+                        <pattern>org.springframework.data.domain.Page</pattern>
+                    </classPatterns>
+                    <excludeClasses>
+                        <class>java.io.Serializable</class>
+                    </excludeClasses>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
