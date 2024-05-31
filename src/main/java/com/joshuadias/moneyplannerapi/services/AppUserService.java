@@ -4,6 +4,7 @@ import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.dto.requests.appUser.AppUserFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.AppUserResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
+import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.AppUser;
 import com.joshuadias.moneyplannerapi.models.Role;
@@ -57,7 +58,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
 
     public AppUser findByEmailOrThrow(String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException(MessageEnum.APP_USER_NOT_FOUND_WITH_EMAIL.getMessage()));
+                .orElseThrow(() -> new BadRequestException(MessageEnum.APP_USER_NOT_FOUND_WITH_EMAIL.getMessage(email)));
     }
 
     private void addPredicates(
