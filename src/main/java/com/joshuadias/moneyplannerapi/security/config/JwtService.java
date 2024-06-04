@@ -20,7 +20,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 @Service
 public class JwtService {
 
-    private static final int ACCESS_TOKEN_EXPIRATION_MINUTES = 30;
+    private static final int ACCESS_TOKEN_EXPIRATION_MINUTES = 120;
 
     @Value("${security.jwt.secret}")
     private String SECRET_KEY;
