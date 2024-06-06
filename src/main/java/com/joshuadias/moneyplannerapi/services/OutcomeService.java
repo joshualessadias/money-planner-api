@@ -3,6 +3,7 @@ package com.joshuadias.moneyplannerapi.services;
 import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.OutcomeKpiResponseDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -212,6 +214,15 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         }
         log.info(MessageEnum.OUTCOME_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageOutcomes.getNumberOfElements())));
         return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class);
+    }
+
+    public OutcomeKpiResponseDTO getKpi(OutcomeFilterRequestDTO filter) {
+        log.info(MessageEnum.OUTCOME_FINDING_KPI.getMessage());
+        var spec = generateSpecification(filter);
+        var outcomes = repository.findAll(spec);
+        log.info(MessageEnum.OUTCOME_FOUND_KPI.getMessage(String.valueOf(outcomes.size())));
+        var totalValue = outcomes.stream().map(Outcome::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new OutcomeKpiResponseDTO(totalValue);
     }
 
     public void delete(Long id) {

@@ -2,6 +2,7 @@ package com.joshuadias.moneyplannerapi.controllers;
 
 import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeRequestDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.OutcomeKpiResponseDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeResponseDTO;
 import com.joshuadias.moneyplannerapi.services.OutcomeService;
 import com.joshuadias.moneyplannerapi.utils.OrderByUtils;
@@ -63,6 +64,30 @@ public class OutcomeController {
         filter.setFindAll(findAll);
 
         return new ResponseEntity<>(outcomeService.getAllPageable(filter), OK);
+    }
+
+    @GetMapping("/kpi")
+    public ResponseEntity<OutcomeKpiResponseDTO> getOutcomeKpi(
+            @RequestParam(name = "categoryId", required = false) Long categoryId,
+            @RequestParam(name = "paymentMethodId", required = false) Long paymentMethodId,
+            @RequestParam(name = "bankId", required = false) Long bankId,
+            @RequestParam(name = "initialDate", required = false) Long initialDate,
+            @RequestParam(name = "finalDate", required = false) Long finalDate,
+            @RequestParam(name = "initialValue", required = false) BigDecimal initialValue,
+            @RequestParam(name = "finalValue", required = false) BigDecimal finalValue,
+            @RequestParam(name = "description", required = false) String description
+    ) {
+        var filter = new OutcomeFilterRequestDTO();
+        filter.setCategoryId(categoryId);
+        filter.setPaymentMethodId(paymentMethodId);
+        filter.setBankId(bankId);
+        filter.setInitialDate(initialDate == null ? null : new Date(initialDate));
+        filter.setFinalDate(finalDate == null ? null : new Date(finalDate));
+        filter.setInitialValue(initialValue);
+        filter.setFinalValue(finalValue);
+        filter.setDescription(description);
+
+        return new ResponseEntity<>(outcomeService.getKpi(filter), OK);
     }
 
     @PutMapping("/{id}")
