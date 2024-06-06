@@ -80,6 +80,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> noSuchElementException(
             NoSuchElementException ex
     ) {
+        log.error("noSuchElementException", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
@@ -89,6 +90,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> methodNotAllowedExceptionHandler(
             MethodNotAllowedException ex
     ) {
+        log.error("methodNotAllowedExceptionHandler", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.METHOD_NOT_ALLOWED, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
@@ -98,15 +100,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> conflictExceptionHandler(
             ConflictException ex
     ) {
+        log.error("conflictExceptionHandler", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ProblemDetail> defaultExceptionHandler(
+    public ResponseEntity<ProblemDetail> illegalArgumentException(
             IllegalArgumentException ex
     ) {
+        log.error("illegalArgumentException", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.PRECONDITION_FAILED, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.PRECONDITION_FAILED);
@@ -116,6 +120,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> resourceAccessExceptionHandler(
             ResourceAccessException ex
     ) {
+        log.error("resourceAccessExceptionHandler", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
@@ -123,6 +128,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException ex) {
+        log.error("handleAccessDeniedException", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
@@ -132,13 +138,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> defaultExceptionHandler(
             DefaultException ex
     ) {
+        log.error("defaultExceptionHandler", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> defaultExceptionHandler(Exception ex) {
+    public ResponseEntity<ProblemDetail> exceptionHandler(Exception ex) {
+        log.error("exceptionHandler", ex);
         final ProblemDetail errorDetails =
                 ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
