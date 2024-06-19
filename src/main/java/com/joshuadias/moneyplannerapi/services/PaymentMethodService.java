@@ -90,7 +90,7 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
     }
 
     private Specification<PaymentMethod> generateSpecification(PaymentMethodFilterRequestDTO filter) {
-        return (root, _, criteriaBuilder) -> {
+        return (root, query, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(filter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

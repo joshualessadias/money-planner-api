@@ -81,7 +81,7 @@ public class OutcomeCategoryService
     }
 
     private Specification<OutcomeCategory> generateSpecification(OutcomeCategoryFilterRequestDTO outcomeCategoryFilter) {
-        return (root, _, criteriaBuilder) -> {
+        return (root, query, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(outcomeCategoryFilter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

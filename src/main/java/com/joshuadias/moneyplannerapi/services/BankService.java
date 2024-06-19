@@ -82,7 +82,7 @@ public class BankService extends AbstractServiceRepository<BankRepository, Bank,
     }
 
     private Specification<Bank> generateSpecification(BankFilterRequestDTO filter) {
-        return (root, _, criteriaBuilder) -> {
+        return (root, query, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(filter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

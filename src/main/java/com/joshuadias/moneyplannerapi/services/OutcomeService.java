@@ -194,7 +194,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     }
 
     private Specification<Outcome> generateSpecification(OutcomeFilterRequestDTO outcomeFilter) {
-        return (root, _, criteriaBuilder) -> {
+        return (root, query, criteriaBuilder) -> {
             var predicates = new ArrayList<Predicate>();
             addPredicates(outcomeFilter, predicates, criteriaBuilder, root);
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
