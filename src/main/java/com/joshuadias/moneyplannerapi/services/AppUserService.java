@@ -7,7 +7,7 @@ import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.AppUser;
-import com.joshuadias.moneyplannerapi.models.Role;
+import com.joshuadias.moneyplannerapi.models.AppRole;
 import com.joshuadias.moneyplannerapi.repositories.AppUserRepository;
 import com.joshuadias.moneyplannerapi.repositories.RoleRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -34,7 +34,7 @@ public class AppUserService extends AbstractServiceRepository<AppUserRepository,
                 .orElseThrow(() -> new NotFoundException(MessageEnum.APP_USER_NOT_FOUND_WITH_ID.getMessage()));
     }
 
-    public Role findRoleByIdOrThrow(Long roleId) {
+    public AppRole findRoleByIdOrThrow(Long roleId) {
         return roleRepository.findById(roleId)
                 .orElseThrow(() -> new NotFoundException(MessageEnum.ROLE_NOT_FOUND_WITH_ID.getMessage()));
     }
