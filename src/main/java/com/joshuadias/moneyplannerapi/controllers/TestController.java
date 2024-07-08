@@ -13,6 +13,6 @@ public class TestController {
 
     @GetMapping
     public ResponseEntity<String> getById() {
-        return new ResponseEntity<>("Money Planner API is running", OK);
+        return new ResponseEntity<>("Money Planner API is running on Elastic Beanstalk", OK);
     }
 }
