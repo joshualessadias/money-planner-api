@@ -47,7 +47,7 @@ public class OutcomeController {
             @RequestParam(name = "finalValue", required = false) BigDecimal finalValue,
             @RequestParam(name = "description", required = false) String description,
             @RequestParam(name = "findAll", defaultValue = "0") Boolean findAll,
-            @RequestParam(name = "showInstallments", defaultValue = "1") Boolean showInstallments
+            @RequestParam(name = "hideInstallments", defaultValue = "0") Boolean hideInstallments
     ) {
         OrderByUtils.validateOrderBy(orderBy);
         var filter = new OutcomeFilterRequestDTO();
@@ -63,7 +63,7 @@ public class OutcomeController {
         filter.setFinalValue(finalValue);
         filter.setDescription(description);
         filter.setFindAll(findAll);
-        filter.setShowInstallments(showInstallments);
+        filter.setHideInstallments(hideInstallments);
 
         return new ResponseEntity<>(outcomeService.getAllPageable(filter), OK);
     }
@@ -78,7 +78,7 @@ public class OutcomeController {
             @RequestParam(name = "initialValue", required = false) BigDecimal initialValue,
             @RequestParam(name = "finalValue", required = false) BigDecimal finalValue,
             @RequestParam(name = "description", required = false) String description,
-            @RequestParam(name = "showInstallments", defaultValue = "1") Boolean showInstallments
+            @RequestParam(name = "hideInstallments", defaultValue = "0") Boolean hideInstallments
     ) {
         var filter = new OutcomeFilterRequestDTO();
         filter.setCategoryId(categoryId);
@@ -89,7 +89,7 @@ public class OutcomeController {
         filter.setInitialValue(initialValue);
         filter.setFinalValue(finalValue);
         filter.setDescription(description);
-        filter.setShowInstallments(showInstallments);
+        filter.setHideInstallments(hideInstallments);
 
         return new ResponseEntity<>(outcomeService.getKpi(filter), OK);
     }
