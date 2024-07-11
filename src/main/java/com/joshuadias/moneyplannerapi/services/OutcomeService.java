@@ -3,8 +3,10 @@ package com.joshuadias.moneyplannerapi.services;
 import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.outcome.OutcomeRequestDTO;
-import com.joshuadias.moneyplannerapi.dto.responses.OutcomeKpiResponseDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.OutcomeCategoryResponseDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.OutcomeResponseDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.outcomeKpi.OutcomeKpiByCategoryResponseDTO;
+import com.joshuadias.moneyplannerapi.dto.responses.outcomeKpi.OutcomeKpiResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.models.Outcome;
@@ -23,10 +25,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -219,13 +220,45 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class);
     }
 
+    private static BigDecimal calculateTotalValueOfOutcomes(List<Outcome> outcomes) {
+        return outcomes.stream().map(Outcome::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * @param outcomes list of outcomes
+     * @return a list of the categories and the value expended on them ordered by categories that were most expended
+     */
+    private List<OutcomeKpiByCategoryResponseDTO> groupByCategory(
+            List<Outcome> outcomes
+    ) {
+        var kpiByCategoryList = new ArrayList<OutcomeKpiByCategoryResponseDTO>();
+        outcomes.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                Outcome::getCategory,
+                                Collectors.reducing(BigDecimal.ZERO, Outcome::getValue, BigDecimal::add)
+                        )
+                )
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEach(entry -> kpiByCategoryList.add(new OutcomeKpiByCategoryResponseDTO(
+                        entry.getValue(),
+                        convertToSingleDTO(entry.getKey(), OutcomeCategoryResponseDTO.class)
+                )));
+        return kpiByCategoryList;
+    }
+
     public OutcomeKpiResponseDTO getKpi(OutcomeFilterRequestDTO filter) {
         log.info(MessageEnum.OUTCOME_FINDING_KPI.getMessage());
         var spec = generateSpecification(filter);
         var outcomes = repository.findAll(spec);
         log.info(MessageEnum.OUTCOME_FOUND_KPI.getMessage(String.valueOf(outcomes.size())));
-        var totalValue = outcomes.stream().map(Outcome::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        return new OutcomeKpiResponseDTO(totalValue);
+
+        var totalValue = calculateTotalValueOfOutcomes(outcomes);
+        var kpiByCategoryList = groupByCategory(outcomes);
+
+        return new OutcomeKpiResponseDTO(totalValue, kpiByCategoryList);
     }
 
     public void delete(Long id) {
