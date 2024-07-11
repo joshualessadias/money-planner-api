@@ -70,26 +70,12 @@ public class OutcomeController {
 
     @GetMapping("/kpi")
     public ResponseEntity<OutcomeKpiResponseDTO> getOutcomeKpi(
-            @RequestParam(name = "categoryId", required = false) Long categoryId,
-            @RequestParam(name = "paymentMethodId", required = false) Long paymentMethodId,
-            @RequestParam(name = "bankId", required = false) Long bankId,
             @RequestParam(name = "initialDate", required = false) Long initialDate,
-            @RequestParam(name = "finalDate", required = false) Long finalDate,
-            @RequestParam(name = "initialValue", required = false) BigDecimal initialValue,
-            @RequestParam(name = "finalValue", required = false) BigDecimal finalValue,
-            @RequestParam(name = "description", required = false) String description,
-            @RequestParam(name = "hideInstallments", defaultValue = "0") Boolean hideInstallments
+            @RequestParam(name = "finalDate", required = false) Long finalDate
     ) {
         var filter = new OutcomeFilterRequestDTO();
-        filter.setCategoryId(categoryId);
-        filter.setPaymentMethodId(paymentMethodId);
-        filter.setBankId(bankId);
         filter.setInitialDate(initialDate == null ? null : new Date(initialDate));
         filter.setFinalDate(finalDate == null ? null : new Date(finalDate));
-        filter.setInitialValue(initialValue);
-        filter.setFinalValue(finalValue);
-        filter.setDescription(description);
-        filter.setHideInstallments(hideInstallments);
 
         return new ResponseEntity<>(outcomeService.getKpi(filter), OK);
     }
