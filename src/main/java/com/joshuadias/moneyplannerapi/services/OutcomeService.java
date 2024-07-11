@@ -192,6 +192,8 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
             ));
         if (outcomeFilter.getBankId() != null)
             predicates.add(criteriaBuilder.equal(from.get("bank").get("id"), outcomeFilter.getBankId()));
+        if (!outcomeFilter.getShowInstallments())
+            predicates.add(criteriaBuilder.isNull(from.get("installmentParent")));
     }
 
     private Specification<Outcome> generateSpecification(OutcomeFilterRequestDTO outcomeFilter) {
