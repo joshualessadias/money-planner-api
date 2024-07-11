@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -203,7 +204,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
 
     public Page<OutcomeResponseDTO> getAllPageable(OutcomeFilterRequestDTO outcomeFilter) {
         log.info(MessageEnum.OUTCOME_FINDING_ALL_PAGEABLE.getMessage());
-        var sort = getSorting(outcomeFilter.getOrderBy());
+        var sort = getSorting(outcomeFilter.getOrderBy()).and(Sort.by("id").descending());
         var spec = generateSpecification(outcomeFilter);
         Page<Outcome> pageOutcomes;
         if (outcomeFilter.getFindAll()) {
