@@ -18,6 +18,9 @@ jobs:
           java-version: '21'
       - name: Build Project
         run: mvn clean install
+      - name: Generate Version Label
+        id: version_label
+        run: echo "VERSION_LABEL=$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::8}" >> $GITHUB_ENV
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -25,6 +28,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'money-planner-api'
           environment_name: 'money-planner-api-env'
-          version_label: ${{ github.sha }}
+          version_label: ${{ env.VERSION_LABEL }}
           region: us-east-1
           deployment_package: target/money-planner-api-0.0.1-SNAPSHOT.jar
