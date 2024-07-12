@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +35,10 @@ public class Outcome extends BaseModel {
     @JoinColumn(name = "bank_id")
     private Bank bank;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "installment_parent_id")
     private Outcome installmentParent;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "installmentParent", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Outcome> childrenInstallments;
 }

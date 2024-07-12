@@ -9,6 +9,7 @@ import com.joshuadias.moneyplannerapi.dto.responses.outcomeKpi.OutcomeKpiByCateg
 import com.joshuadias.moneyplannerapi.dto.responses.outcomeKpi.OutcomeKpiResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
+import com.joshuadias.moneyplannerapi.helpers.OutcomeHelper;
 import com.joshuadias.moneyplannerapi.models.Outcome;
 import com.joshuadias.moneyplannerapi.repositories.OutcomeRepository;
 import com.joshuadias.moneyplannerapi.utils.DateUtils;
@@ -62,20 +63,30 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         return outcome;
     }
 
+    private Outcome buildInstallmentOutcome(
+            OutcomeRequestDTO outcomeRequestDto,
+            Outcome parentOutcome,
+            Integer installmentNumber
+    ) {
+        var outcome = buildOutcomeFromRequest(outcomeRequestDto);
+        OutcomeHelper.buildInstallmentDescription(outcome, installmentNumber, outcomeRequestDto.getInstallments());
+        var installmentDate = DateUtils.addMonthsToDate(outcome.getDate(), installmentNumber - 1);
+        outcome.setDate(installmentDate);
+        outcome.setInstallmentParent(parentOutcome);
+        return outcome;
+    }
+
     private List<Outcome> createMultipleInstallmentsOutcomes(OutcomeRequestDTO outcomeRequestDto) {
         var outcomes = new ArrayList<Outcome>();
-        for (int i = 1; i <= outcomeRequestDto.getInstallments(); i++) {
-            var outcome = buildOutcomeFromRequest(outcomeRequestDto);
-            outcome.setDescription(String.format(
-                    "%s - %d/%d",
-                    outcome.getDescription(),
-                    i,
-                    outcomeRequestDto.getInstallments()
-            ));
-            var installmentDate = DateUtils.addMonthsToDate(outcome.getDate(), i - 1);
-            outcome.setDate(installmentDate);
-            if (i > 1)
-                outcome.setInstallmentParent(outcomes.getFirst());
+
+        var parentOutcome = buildOutcomeFromRequest(outcomeRequestDto);
+        OutcomeHelper.buildInstallmentDescription(parentOutcome, 1, outcomeRequestDto.getInstallments());
+        var installmentDate = DateUtils.addMonthsToDate(parentOutcome.getDate(), 0);
+        parentOutcome.setDate(installmentDate);
+        outcomes.add(parentOutcome);
+
+        for (int i = 2; i <= outcomeRequestDto.getInstallments(); i++) {
+            var outcome = buildInstallmentOutcome(outcomeRequestDto, parentOutcome, i);
             outcomes.add(outcome);
         }
         return repository.saveAll(outcomes);
@@ -102,23 +113,17 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
                         id))));
     }
 
-    private List<Outcome> findChildrenById(Long id) {
-        return repository.findByInstallmentParentId(id);
-    }
-
-    private void setParameterForInstallmentsOutcome(OutcomeRequestDTO request, Outcome entity, Date parentDate) {
+    private void updateParameterForInstallmentsOutcome(OutcomeRequestDTO request, Outcome entity, Date parentDate) {
         var OUTCOME_WITH_INSTALLMENTS_REGEX = ".*( - (\\d+)/(\\d+))$";
-        var ENTIRE_SUFFIX_PART = 1;
-        var INSTALLMENT_NUMBER_PART = 2;
+        var CURRENT_INSTALLMENT_PART = 2;
 
         var regexPattern = Pattern.compile(OUTCOME_WITH_INSTALLMENTS_REGEX);
         var matcher = regexPattern.matcher(entity.getDescription());
         if (matcher.find()) {
-            var entireSuffix = matcher.group(ENTIRE_SUFFIX_PART);
-            var installmentNumber = Integer.parseInt(matcher.group(INSTALLMENT_NUMBER_PART));
+            var currentInstallment = Integer.parseInt(matcher.group(CURRENT_INSTALLMENT_PART));
 
-            entity.setDescription(request.getDescription() + entireSuffix);
-            entity.setDate(DateUtils.addMonthsToDate(parentDate, installmentNumber - 1));
+            entity.setDescription(request.getDescription() + " - " + currentInstallment + "/" + request.getInstallments());
+            entity.setDate(DateUtils.addMonthsToDate(parentDate, currentInstallment - 1));
         } else {
             entity.setDescription(request.getDescription());
             entity.setDate(new Date(request.getDate()));
@@ -140,23 +145,46 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
 
     @Transactional
     public OutcomeResponseDTO update(Long id, OutcomeRequestDTO request) {
+        var PARENT_INSTALLMENT = 1;
+
         log.info(MessageEnum.OUTCOME_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
         var oldOutcome = findByIdOrThrow(id);
-        var childrenOutcomes = findChildrenById(id);
-        if (!childrenOutcomes.isEmpty()) {
-            setParameterForInstallmentsOutcome(request, oldOutcome, new Date(request.getDate()));
-            var updatedOutcome = repository.save(oldOutcome);
-            log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(oldOutcome.getId())));
-            for (var child : childrenOutcomes) {
-                setParameterForInstallmentsOutcome(request, child, updatedOutcome.getDate());
-                repository.save(child);
-                log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(child.getId())));
+        var childrenOutcomes = oldOutcome.getChildrenInstallments();
+        int installmentsSize = childrenOutcomes.size() + PARENT_INSTALLMENT;
+        var installmentsDiff = request.getInstallments() - installmentsSize;
+        if (installmentsDiff > 0) {
+            for (int i = 1; i <= installmentsDiff; i++) {
+                var installmentNumber = installmentsSize + i;
+                var newOutcome = buildInstallmentOutcome(
+                        request,
+                        oldOutcome,
+                        installmentNumber
+                );
+                childrenOutcomes.add(newOutcome);
             }
-            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
-        } else {
+            log.info(MessageEnum.OUTCOME_CREATED_MULTIPLE.getMessage(String.valueOf(installmentsDiff)));
+        } else if (installmentsDiff < 0) {
+            for (int i = 0; i < Math.abs(installmentsDiff); i++) {
+                var removedOutcome = childrenOutcomes.removeLast();
+                repository.delete(removedOutcome);
+                log.info(MessageEnum.OUTCOME_DELETED_WITH_ID.getMessage(String.valueOf(removedOutcome.getId())));
+            }
+        }
+        childrenOutcomes = oldOutcome.getChildrenInstallments();
+        if (childrenOutcomes.isEmpty()) {
             setOutcomeParametersFromRequest(request, oldOutcome);
             var updatedOutcome = save(oldOutcome);
             log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
+            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
+        } else {
+            updateParameterForInstallmentsOutcome(request, oldOutcome, new Date(request.getDate()));
+            var updatedOutcome = repository.save(oldOutcome);
+            log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(oldOutcome.getId())));
+            for (var child : childrenOutcomes) {
+                updateParameterForInstallmentsOutcome(request, child, updatedOutcome.getDate());
+                repository.save(child);
+                log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(child.getId())));
+            }
             return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
         }
     }
@@ -264,7 +292,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     public void delete(Long id) {
         log.info(MessageEnum.OUTCOME_DELETING_WITH_ID.getMessage(String.valueOf(id)));
         var outcome = findByIdOrThrow(id);
-        var childrenOutcomes = findChildrenById(id);
+        var childrenOutcomes = outcome.getChildrenInstallments();
         for (var child : childrenOutcomes) {
             repository.delete(child);
             log.info(MessageEnum.OUTCOME_DELETED_WITH_ID.getMessage(String.valueOf(child.getId())));
