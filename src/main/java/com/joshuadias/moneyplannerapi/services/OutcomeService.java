@@ -19,6 +19,9 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.AbstractConverter;
+import org.modelmapper.Converter;
+import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -233,6 +236,24 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         };
     }
 
+    Converter<List<Outcome>, Integer> convertChildrenInstallmentsToAmount = new AbstractConverter<>() {
+        @Override
+        protected Integer convert(List<Outcome> childrenInstallments) {
+            return childrenInstallments.size();
+        }
+    };
+
+    PropertyMap<Outcome, OutcomeResponseDTO> mapEntityToResponseDTO = new PropertyMap<>() {
+        @Override
+        protected void configure() {
+            using(convertChildrenInstallmentsToAmount).map(
+                    source.getChildrenInstallments(),
+                    destination.getChildrenInstallmentsAmount()
+            );
+        }
+    };
+
+    @Transactional
     public Page<OutcomeResponseDTO> getAllPageable(OutcomeFilterRequestDTO outcomeFilter) {
         log.info(MessageEnum.OUTCOME_FINDING_ALL_PAGEABLE.getMessage());
         var sort = getSorting(outcomeFilter.getOrderBy()).and(Sort.by("id").descending());
@@ -245,7 +266,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
             pageOutcomes = repository.findAll(spec, pageable);
         }
         log.info(MessageEnum.OUTCOME_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageOutcomes.getNumberOfElements())));
-        return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class);
+        return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class, mapEntityToResponseDTO);
     }
 
     private static BigDecimal calculateTotalValueOfOutcomes(List<Outcome> outcomes) {

@@ -13,4 +13,5 @@ public class OutcomeResponseDTO {
     private OutcomeCategoryResponseDTO category;
     private PaymentMethodResponseDTO paymentMethod;
     private BankResponseDTO bank;
+    private Integer childrenInstallmentsAmount;
 }
