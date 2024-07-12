@@ -37,6 +37,7 @@ public class Outcome extends BaseModel {
 
     @ManyToOne()
     @JoinColumn(name = "installment_parent_id")
+    // Should it be renamed to parentInstallment?
     private Outcome installmentParent;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "installmentParent", orphanRemoval = true, fetch = FetchType.LAZY)
