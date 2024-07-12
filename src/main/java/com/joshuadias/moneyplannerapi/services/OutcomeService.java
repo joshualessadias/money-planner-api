@@ -10,6 +10,7 @@ import com.joshuadias.moneyplannerapi.dto.responses.outcomeKpi.OutcomeKpiRespons
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.helpers.OutcomeHelper;
+import com.joshuadias.moneyplannerapi.mappers.OutcomeMapper;
 import com.joshuadias.moneyplannerapi.models.Outcome;
 import com.joshuadias.moneyplannerapi.repositories.OutcomeRepository;
 import com.joshuadias.moneyplannerapi.utils.DateUtils;
@@ -19,9 +20,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.AbstractConverter;
-import org.modelmapper.Converter;
-import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -101,12 +99,16 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         if (request.getInstallments() != null && request.getInstallments() > 1) {
             var outcomes = createMultipleInstallmentsOutcomes(request);
             log.info(MessageEnum.OUTCOME_CREATED_MULTIPLE.getMessage(String.valueOf(request.getInstallments())));
-            return convertToSingleDTO(outcomes.getFirst(), OutcomeResponseDTO.class);
+            return convertToSingleDTO(
+                    outcomes.getFirst(),
+                    OutcomeResponseDTO.class,
+                    OutcomeMapper.mapEntityToResponseDTO
+            );
         } else {
             var outcome = buildOutcomeFromRequest(request);
             var createdOutcome = save(outcome);
             log.info(MessageEnum.OUTCOME_CREATED_WITH_ID.getMessage(String.valueOf(createdOutcome.getId())));
-            return convertToSingleDTO(createdOutcome, OutcomeResponseDTO.class);
+            return convertToSingleDTO(createdOutcome, OutcomeResponseDTO.class, OutcomeMapper.mapEntityToResponseDTO);
         }
     }
 
@@ -178,7 +180,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
             setOutcomeParametersFromRequest(request, oldOutcome);
             var updatedOutcome = save(oldOutcome);
             log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(updatedOutcome.getId())));
-            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
+            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class, OutcomeMapper.mapEntityToResponseDTO);
         } else {
             updateParameterForInstallmentsOutcome(request, oldOutcome, new Date(request.getDate()));
             var updatedOutcome = repository.save(oldOutcome);
@@ -188,7 +190,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
                 repository.save(child);
                 log.info(MessageEnum.OUTCOME_UPDATED_WITH_ID.getMessage(String.valueOf(child.getId())));
             }
-            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class);
+            return convertToSingleDTO(updatedOutcome, OutcomeResponseDTO.class, OutcomeMapper.mapEntityToResponseDTO);
         }
     }
 
@@ -196,7 +198,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
     public OutcomeResponseDTO getById(Long id) {
         log.info(MessageEnum.OUTCOME_FINDING_BY_ID.getMessage(String.valueOf(id)));
         var outcome = findByIdOrThrow(id);
-        return convertToSingleDTO(outcome, OutcomeResponseDTO.class);
+        return convertToSingleDTO(outcome, OutcomeResponseDTO.class, OutcomeMapper.mapEntityToResponseDTO);
     }
 
     private void addPredicates(
@@ -236,23 +238,6 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
         };
     }
 
-    Converter<List<Outcome>, Integer> convertChildrenInstallmentsToAmount = new AbstractConverter<>() {
-        @Override
-        protected Integer convert(List<Outcome> childrenInstallments) {
-            return childrenInstallments.size();
-        }
-    };
-
-    PropertyMap<Outcome, OutcomeResponseDTO> mapEntityToResponseDTO = new PropertyMap<>() {
-        @Override
-        protected void configure() {
-            using(convertChildrenInstallmentsToAmount).map(
-                    source.getChildrenInstallments(),
-                    destination.getChildrenInstallmentsAmount()
-            );
-        }
-    };
-
     @Transactional
     public Page<OutcomeResponseDTO> getAllPageable(OutcomeFilterRequestDTO outcomeFilter) {
         log.info(MessageEnum.OUTCOME_FINDING_ALL_PAGEABLE.getMessage());
@@ -266,7 +251,7 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
             pageOutcomes = repository.findAll(spec, pageable);
         }
         log.info(MessageEnum.OUTCOME_FOUND_ALL_PAGEABLE.getMessage(String.valueOf(pageOutcomes.getNumberOfElements())));
-        return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class, mapEntityToResponseDTO);
+        return convertToPageDTO(pageOutcomes, OutcomeResponseDTO.class, OutcomeMapper.mapEntityToResponseDTO);
     }
 
     private static BigDecimal calculateTotalValueOfOutcomes(List<Outcome> outcomes) {
