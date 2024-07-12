@@ -13,6 +13,9 @@ public class OutcomeMapper {
     private static final Converter<List<Outcome>, Integer> convertChildrenInstallmentsToAmount = new AbstractConverter<>() {
         @Override
         protected Integer convert(List<Outcome> childrenInstallments) {
+            if (childrenInstallments == null) {
+                return 0;
+            }
             return childrenInstallments.size();
         }
     };
