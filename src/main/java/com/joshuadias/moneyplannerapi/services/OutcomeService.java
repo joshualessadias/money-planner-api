@@ -130,7 +130,11 @@ public class OutcomeService extends AbstractServiceRepository<OutcomeRepository,
             entity.setDescription(request.getDescription() + " - " + currentInstallment + "/" + request.getInstallments());
             entity.setDate(DateUtils.addMonthsToDate(parentDate, currentInstallment - 1));
         } else {
-            entity.setDescription(request.getDescription());
+            if (request.getInstallments() > 1 && entity.getInstallmentParent() == null) {
+                entity.setDescription(request.getDescription() + " - 1/" + request.getInstallments());
+            } else {
+                entity.setDescription(request.getDescription());
+            }
             entity.setDate(new Date(request.getDate()));
         }
         entity.setValue(request.getValue());
