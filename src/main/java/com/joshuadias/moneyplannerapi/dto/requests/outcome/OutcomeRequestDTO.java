@@ -14,6 +14,7 @@ public class OutcomeRequestDTO {
     static final String VALUE_REQUIRED_MESSAGE = "Value is required";
     static final String VALUE_POSITIVE_MESSAGE = "Value must be positive or zero";
     static final String DATE_REQUIRED_MESSAGE = "Date is required";
+
     @NotBlank(message = DESCRIPTION_REQUIRED_MESSAGE)
     @Size(max = DESCRIPTION_MAX_SIZE, message = DESCRIPTION_MAX_SIZE_MESSAGE)
     private String description;
@@ -24,7 +25,6 @@ public class OutcomeRequestDTO {
 
     @NotNull(message = DATE_REQUIRED_MESSAGE)
     private Long date;
-
 
     private Long categoryId;
 

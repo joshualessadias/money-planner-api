@@ -78,7 +78,12 @@ public enum MessageEnum {
     APP_USER_FOUND_ALL_PAGEABLE("message.app.user.found.all.pageable"),
     APP_USER_EMAIL_ALREADY_REGISTERED("message.app.user.email.already.registered"),
     APP_USER_FINDING_CURRENT("message.app.user.finding.current"),
-    APP_USER_FOUND_CURRENT_BY_EMAIL("message.app.user.found.current.by.email");
+    APP_USER_FOUND_CURRENT_BY_EMAIL("message.app.user.found.current.by.email"),
+
+    SPENDING_GOAL_CREATING("message.spending.goal.creating"),
+    SPENDING_GOAL_CREATED_WITH_ID("message.spending.goal.created.with.id"),
+    SPENDING_GOAL_FINDING_BY_ID("message.spending.goal.finding.by.id"),
+    SPENDING_GOAL_NOT_FOUND_WITH_ID("message.spending.goal.not.found.with.id");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
