@@ -58,7 +58,6 @@ public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalR
                 categorySpendingGoalListValueSum = categorySpendingGoalListValueSum.add(categorySpendingGoal.getValue());
             }
         }
-
         if (categorySpendingGoalListValueSum.compareTo(valueLimit) > 0) {
             throw new BadRequestException(MessageEnum.SPENDING_GOAL_VALUE_LIMIT_EXCEEDED.getMessage(
                     categorySpendingGoalListValueSum.toString(),

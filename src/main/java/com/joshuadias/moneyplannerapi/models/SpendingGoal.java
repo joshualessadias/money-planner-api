@@ -15,6 +15,9 @@ import java.util.List;
 @Table(name = "spending_goal")
 public class SpendingGoal extends BaseModel {
 
+    @Column(name = "name", nullable = false, length = 50)
+    private String name;
+
     @Column(name = "value", nullable = false, precision = 12, scale = 2)
     private BigDecimal value;
 
