@@ -1,6 +1,7 @@
 package com.joshuadias.moneyplannerapi.services;
 
 import com.joshuadias.moneyplannerapi.base.AbstractServiceRepository;
+import com.joshuadias.moneyplannerapi.dto.requests.spendingGoal.CategorySpendingGoalRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.requests.spendingGoal.SpendingGoalRequestDTO;
 import com.joshuadias.moneyplannerapi.dto.responses.spendingGoal.SpendingGoalResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
@@ -26,8 +27,18 @@ public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalR
 
     private SpendingGoal buildEntityFromRequest(SpendingGoalRequestDTO request) {
         var entity = convertToSingleDTO(request, SpendingGoal.class);
-        SpendingGoalHelper.setParametersForCreate(entity);
+        SpendingGoalHelper.setCustomParameters(entity);
         return entity;
+    }
+
+    private void checkRepeatedOutcomeCategory(SpendingGoalRequestDTO request) {
+        var outcomeCategoryIdList = request.getCategorySpendingGoalList()
+                .stream()
+                .map(CategorySpendingGoalRequestDTO::getOutcomeCategoryId)
+                .toList();
+        if (outcomeCategoryIdList.size() != outcomeCategoryIdList.stream().distinct().count()) {
+            throw new BadRequestException(MessageEnum.SPENDING_GOAL_REPEATED_OUTCOME_CATEGORY.getMessage());
+        }
     }
 
     private void validateRequest(SpendingGoalRequestDTO request) {
@@ -37,6 +48,7 @@ public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalR
         if (request.getCategorySpendingGoalList() == null || request.getCategorySpendingGoalList().isEmpty()) {
             return;
         }
+        checkRepeatedOutcomeCategory(request);
         for (var categorySpendingGoal : request.getCategorySpendingGoalList()) {
             if (categorySpendingGoal.getIsPercentual() != null && categorySpendingGoal.getIsPercentual()) {
                 var absoluteValue = valueLimit.multiply(categorySpendingGoal.getValue()
@@ -83,8 +95,14 @@ public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalR
     }
 
     public SpendingGoalResponseDTO update(Long id, SpendingGoalRequestDTO request) {
-        // TODO: Implement this method
-        throw new UnsupportedOperationException();
+        log.info(MessageEnum.SPENDING_GOAL_UPDATING_WITH_ID.getMessage(String.valueOf(id)));
+        validateRequest(request);
+        var entityFound = findByIdOrThrow(id);
+        var entity = buildEntityFromRequest(request);
+        entity.setId(entityFound.getId());
+        var updatedEntity = save(entity);
+        log.info(MessageEnum.SPENDING_GOAL_UPDATED_WITH_ID.getMessage(String.valueOf(updatedEntity.getId())));
+        return convertToSingleDTO(updatedEntity, SpendingGoalResponseDTO.class);
     }
 
     public void delete(Long id) {
