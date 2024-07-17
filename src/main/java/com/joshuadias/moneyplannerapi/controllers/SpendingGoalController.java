@@ -42,4 +42,18 @@ public class SpendingGoalController {
     ) {
         return new ResponseEntity<>(service.getPageable(pageable, predicate), OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SpendingGoalResponseDTO> updateSpendingGoal(
+            @PathVariable Long id,
+            @Valid @RequestBody SpendingGoalRequestDTO spendingGoalRequestDTO
+    ) {
+        return new ResponseEntity<>(service.update(id, spendingGoalRequestDTO), OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSpendingGoal(@PathVariable Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(OK);
+    }
 }

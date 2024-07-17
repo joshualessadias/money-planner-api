@@ -81,4 +81,14 @@ public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalR
         var entityPageable = repository.findAll(predicate, pageable);
         return convertToPageDTO(entityPageable, SpendingGoalResponseDTO.class);
     }
+
+    public SpendingGoalResponseDTO update(Long id, SpendingGoalRequestDTO request) {
+        // TODO: Implement this method
+        throw new UnsupportedOperationException();
+    }
+
+    public void delete(Long id) {
+        // TODO: Implement this method
+        throw new UnsupportedOperationException();
+    }
 }

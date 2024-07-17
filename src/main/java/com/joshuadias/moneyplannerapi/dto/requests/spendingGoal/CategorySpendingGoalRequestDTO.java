@@ -13,6 +13,8 @@ public class CategorySpendingGoalRequestDTO {
     static final String VALUE_POSITIVE_OR_ZERO_MESSAGE = "Value must be positive or zero";
     static final String OUTCOME_CATEGORY_ID_NOT_NULL_MESSAGE = "Outcome category id is required";
 
+    private Long id;
+
     @NotNull(message = VALUE_NOT_NULL_MESSAGE)
     @PositiveOrZero(message = VALUE_POSITIVE_OR_ZERO_MESSAGE)
     private BigDecimal value;
