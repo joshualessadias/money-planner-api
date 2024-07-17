@@ -27,5 +27,5 @@ public class SpendingGoalRequestDTO {
     private Long finalDate;
 
     @Valid
-    private List<CategorySpendingGoalRequestDTO> categorySpendingGoal;
+    private List<CategorySpendingGoalRequestDTO> categorySpendingGoalList;
 }

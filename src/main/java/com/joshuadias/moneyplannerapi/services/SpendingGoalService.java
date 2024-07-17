@@ -5,6 +5,7 @@ import com.joshuadias.moneyplannerapi.dto.requests.spendingGoal.SpendingGoalRequ
 import com.joshuadias.moneyplannerapi.dto.responses.spendingGoal.SpendingGoalResponseDTO;
 import com.joshuadias.moneyplannerapi.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.helpers.SpendingGoalHelper;
 import com.joshuadias.moneyplannerapi.models.SpendingGoal;
 import com.joshuadias.moneyplannerapi.repositories.SpendingGoalRepository;
 import com.querydsl.core.types.Predicate;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 @Slf4j
@@ -22,12 +25,40 @@ import org.springframework.stereotype.Service;
 public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalRepository, SpendingGoal, Long> {
 
     private SpendingGoal buildEntityFromRequest(SpendingGoalRequestDTO request) {
-        return convertToSingleDTO(request, SpendingGoal.class);
+        var entity = convertToSingleDTO(request, SpendingGoal.class);
+        SpendingGoalHelper.setParametersForCreate(entity);
+        return entity;
+    }
+
+    private void validateRequest(SpendingGoalRequestDTO request) {
+        var valueLimit = request.getValue();
+        var categorySpendingGoalListValueSum = BigDecimal.ZERO;
+
+        if (request.getCategorySpendingGoalList() == null || request.getCategorySpendingGoalList().isEmpty()) {
+            return;
+        }
+        for (var categorySpendingGoal : request.getCategorySpendingGoalList()) {
+            if (categorySpendingGoal.getIsPercentual() != null && categorySpendingGoal.getIsPercentual()) {
+                var absoluteValue = valueLimit.multiply(categorySpendingGoal.getValue()
+                                                                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
+                categorySpendingGoalListValueSum = categorySpendingGoalListValueSum.add(absoluteValue);
+            } else {
+                categorySpendingGoalListValueSum = categorySpendingGoalListValueSum.add(categorySpendingGoal.getValue());
+            }
+        }
+
+        if (categorySpendingGoalListValueSum.compareTo(valueLimit) > 0) {
+            throw new BadRequestException(MessageEnum.SPENDING_GOAL_VALUE_LIMIT_EXCEEDED.getMessage(
+                    categorySpendingGoalListValueSum.toString(),
+                    valueLimit.toString()
+            ));
+        }
     }
 
     @Transactional
     public SpendingGoalResponseDTO create(SpendingGoalRequestDTO request) {
         log.info(MessageEnum.SPENDING_GOAL_CREATING.getMessage());
+        validateRequest(request);
         var entity = buildEntityFromRequest(request);
         var createdEntity = save(entity);
         log.info(MessageEnum.SPENDING_GOAL_CREATED_WITH_ID.getMessage(String.valueOf(createdEntity.getId())));
