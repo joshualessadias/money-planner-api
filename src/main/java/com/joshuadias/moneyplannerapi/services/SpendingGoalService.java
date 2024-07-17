@@ -106,7 +106,10 @@ public class SpendingGoalService extends AbstractServiceRepository<SpendingGoalR
     }
 
     public void delete(Long id) {
-        // TODO: Implement this method
-        throw new UnsupportedOperationException();
+        log.info(MessageEnum.SPENDING_GOAL_DELETING_WITH_ID.getMessage(String.valueOf(id)));
+        if (!repository.existsById(id))
+            throw new BadRequestException(MessageEnum.SPENDING_GOAL_NOT_FOUND_WITH_ID.getMessage(String.valueOf(id)));
+        repository.deleteById(id);
+        log.info(MessageEnum.SPENDING_GOAL_DELETED_WITH_ID.getMessage(String.valueOf(id)));
     }
 }

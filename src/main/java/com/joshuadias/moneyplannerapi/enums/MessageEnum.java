@@ -87,7 +87,9 @@ public enum MessageEnum {
     SPENDING_GOAL_VALUE_LIMIT_EXCEEDED("message.spending.goal.value.limit.exceeded"),
     SPENDING_GOAL_UPDATING_WITH_ID("message.spending.goal.updating.with.id"),
     SPENDING_GOAL_UPDATED_WITH_ID("message.spending.goal.updated.with.id"),
-    SPENDING_GOAL_REPEATED_OUTCOME_CATEGORY("message.spending.goal.repeated.outcome.category");
+    SPENDING_GOAL_REPEATED_OUTCOME_CATEGORY("message.spending.goal.repeated.outcome.category"),
+    SPENDING_GOAL_DELETING_WITH_ID("message.spending.goal.deleting.with.id"),
+    SPENDING_GOAL_DELETED_WITH_ID("message.spending.goal.deleted.with.id");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
