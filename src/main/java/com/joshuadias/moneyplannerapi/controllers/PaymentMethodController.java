@@ -33,8 +33,10 @@ public class PaymentMethodController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PaymentMethodResponseDTO>> getList() {
-        return new ResponseEntity<>(service.getAll(), OK);
+    public ResponseEntity<List<PaymentMethodResponseDTO>> getList(
+            @RequestParam(name = "orderBy", required = false) String orderBy
+    ) {
+        return new ResponseEntity<>(service.getAll(orderBy), OK);
     }
 
     @GetMapping("/pageable")

@@ -33,8 +33,10 @@ public class BankController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<BankResponseDTO>> getList() {
-        return new ResponseEntity<>(service.getAll(), OK);
+    public ResponseEntity<List<BankResponseDTO>> getList(
+            @RequestParam(name = "orderBy", required = false) String orderBy
+    ) {
+        return new ResponseEntity<>(service.getAll(orderBy), OK);
     }
 
     @GetMapping("/pageable")

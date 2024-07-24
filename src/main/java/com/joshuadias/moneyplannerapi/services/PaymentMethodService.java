@@ -63,9 +63,10 @@ public class PaymentMethodService extends AbstractServiceRepository<PaymentMetho
         return convertToSingleDTO(entity, PaymentMethodResponseDTO.class);
     }
 
-    public List<PaymentMethodResponseDTO> getAll() {
+    public List<PaymentMethodResponseDTO> getAll(String orderBy) {
         log.info(MessageEnum.PAYMENT_METHOD_FINDING_ALL.getMessage());
-        var entities = repository.findAll();
+        var sort = getSorting(orderBy);
+        var entities = repository.findAll(sort);
         return convertToListDTO(entities, PaymentMethodResponseDTO.class);
     }
 

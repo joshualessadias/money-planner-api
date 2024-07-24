@@ -61,9 +61,10 @@ public class BankService extends AbstractServiceRepository<BankRepository, Bank,
         return convertToSingleDTO(entity, BankResponseDTO.class);
     }
 
-    public List<BankResponseDTO> getAll() {
+    public List<BankResponseDTO> getAll(String orderBy) {
         log.info(MessageEnum.BANK_FINDING_ALL.getMessage());
-        var entities = repository.findAll();
+        var sort = getSorting(orderBy);
+        var entities = repository.findAll(sort);
         return convertToListDTO(entities, BankResponseDTO.class);
     }
 

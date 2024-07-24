@@ -57,10 +57,11 @@ public class OutcomeCategoryService
         return convertToSingleDTO(outcomeCategory, OutcomeCategoryResponseDTO.class);
     }
 
-    public List<OutcomeCategoryResponseDTO> getAll() {
+    public List<OutcomeCategoryResponseDTO> getAll(String orderBy) {
         log.info(MessageEnum.OUTCOME_CATEGORY_FINDING_ALL.getMessage());
-        var outcomeCategories = repository.findAll();
-        return convertToListDTO(outcomeCategories, OutcomeCategoryResponseDTO.class);
+        var sort = getSorting(orderBy);
+        var entities = repository.findAll(sort);
+        return convertToListDTO(entities, OutcomeCategoryResponseDTO.class);
     }
 
     private void addPredicates(

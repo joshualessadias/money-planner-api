@@ -34,8 +34,10 @@ public class OutcomeCategoryController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<OutcomeCategoryResponseDTO>> getOutcomeCategoryList() {
-        return new ResponseEntity<>(outcomeCategoryService.getAll(), OK);
+    public ResponseEntity<List<OutcomeCategoryResponseDTO>> getOutcomeCategoryList(
+            @RequestParam(name = "orderBy", required = false) String orderBy
+    ) {
+        return new ResponseEntity<>(outcomeCategoryService.getAll(orderBy), OK);
     }
 
     @GetMapping("/pageable")
