@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.config;
+package com.joshuadias.moneyplannerapi.domains.core.config.security;
 
 import com.joshuadias.moneyplannerapi.domains.core.services.AppUserService;
 import lombok.RequiredArgsConstructor;

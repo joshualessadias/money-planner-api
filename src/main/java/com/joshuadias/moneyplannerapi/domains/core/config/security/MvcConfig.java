@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.config;
+package com.joshuadias.moneyplannerapi.domains.core.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

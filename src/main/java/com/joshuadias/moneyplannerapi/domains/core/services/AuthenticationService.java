@@ -6,7 +6,7 @@ import com.joshuadias.moneyplannerapi.domains.core.dto.responses.AuthenticationR
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
 import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.domains.core.models.AppUser;
-import com.joshuadias.moneyplannerapi.domains.core.config.JwtService;
+import com.joshuadias.moneyplannerapi.domains.core.config.security.JwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

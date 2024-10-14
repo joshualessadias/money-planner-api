@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.config;
+package com.joshuadias.moneyplannerapi.domains.core.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
