@@ -4,8 +4,8 @@ import com.joshuadias.moneyplannerapi.domains.shared.base.AbstractServiceReposit
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.appUser.AppUserFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.AppUserResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.NotFoundException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.domains.core.models.AppUser;
 import com.joshuadias.moneyplannerapi.domains.core.models.AppRole;
 import com.joshuadias.moneyplannerapi.domains.core.repositories.AppUserRepository;

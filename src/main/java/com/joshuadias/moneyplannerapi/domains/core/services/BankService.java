@@ -5,8 +5,8 @@ import com.joshuadias.moneyplannerapi.domains.core.dto.requests.bank.BankFilterR
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.bank.BankRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.BankResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.NotFoundException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.domains.core.models.Bank;
 import com.joshuadias.moneyplannerapi.domains.core.repositories.BankRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;

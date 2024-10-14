@@ -4,7 +4,7 @@ import com.joshuadias.moneyplannerapi.domains.core.dto.requests.appUser.Authenti
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.appUser.RegisterRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.AuthenticationResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.domains.core.models.AppUser;
 import com.joshuadias.moneyplannerapi.domains.core.config.security.JwtService;
 import jakarta.transaction.Transactional;

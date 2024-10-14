@@ -1,7 +1,7 @@
 package com.joshuadias.moneyplannerapi.domains.core.utils;
 
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Sort;

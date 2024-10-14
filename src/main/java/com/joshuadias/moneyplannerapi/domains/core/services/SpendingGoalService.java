@@ -5,7 +5,7 @@ import com.joshuadias.moneyplannerapi.domains.core.dto.requests.spendingGoal.Cat
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.spendingGoal.SpendingGoalRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.spendingGoal.SpendingGoalResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.BadRequestException;
 import com.joshuadias.moneyplannerapi.domains.core.helpers.SpendingGoalHelper;
 import com.joshuadias.moneyplannerapi.domains.core.models.SpendingGoal;
 import com.joshuadias.moneyplannerapi.domains.core.repositories.SpendingGoalRepository;

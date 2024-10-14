@@ -5,8 +5,8 @@ import com.joshuadias.moneyplannerapi.domains.core.dto.requests.paymentMethod.Pa
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.paymentMethod.PaymentMethodRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.PaymentMethodResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.BadRequestException;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.NotFoundException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.BadRequestException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.domains.core.models.PaymentMethod;
 import com.joshuadias.moneyplannerapi.domains.core.repositories.PaymentMethodRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;

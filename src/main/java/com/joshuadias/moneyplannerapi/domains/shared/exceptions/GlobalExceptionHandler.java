@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.exceptions;
+package com.joshuadias.moneyplannerapi.domains.shared.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

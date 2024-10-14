@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.exceptions;
+package com.joshuadias.moneyplannerapi.domains.shared.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

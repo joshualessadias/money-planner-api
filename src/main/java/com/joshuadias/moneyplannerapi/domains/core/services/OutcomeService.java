@@ -8,7 +8,7 @@ import com.joshuadias.moneyplannerapi.domains.core.dto.responses.OutcomeResponse
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.outcomeKpi.OutcomeKpiByCategoryResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.outcomeKpi.OutcomeKpiResponseDTO;
 import com.joshuadias.moneyplannerapi.domains.core.enums.MessageEnum;
-import com.joshuadias.moneyplannerapi.domains.core.exceptions.NotFoundException;
+import com.joshuadias.moneyplannerapi.domains.shared.exceptions.NotFoundException;
 import com.joshuadias.moneyplannerapi.domains.core.helpers.OutcomeHelper;
 import com.joshuadias.moneyplannerapi.domains.core.mappers.OutcomeMapper;
 import com.joshuadias.moneyplannerapi.domains.core.models.Outcome;
