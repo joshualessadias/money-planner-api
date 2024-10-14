@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.base;
+package com.joshuadias.moneyplannerapi.domains.shared.base;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

@@ -1,6 +1,6 @@
 package com.joshuadias.moneyplannerapi.domains.core.models;
 
-import com.joshuadias.moneyplannerapi.domains.core.base.BaseModel;
+import com.joshuadias.moneyplannerapi.domains.shared.base.BaseModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;

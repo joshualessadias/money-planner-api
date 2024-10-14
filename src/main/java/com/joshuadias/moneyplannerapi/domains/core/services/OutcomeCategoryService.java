@@ -1,6 +1,6 @@
 package com.joshuadias.moneyplannerapi.domains.core.services;
 
-import com.joshuadias.moneyplannerapi.domains.core.base.AbstractServiceRepository;
+import com.joshuadias.moneyplannerapi.domains.shared.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.outcomeCategory.OutcomeCategoryFilterRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.outcomeCategory.OutcomeCategoryRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.OutcomeCategoryResponseDTO;

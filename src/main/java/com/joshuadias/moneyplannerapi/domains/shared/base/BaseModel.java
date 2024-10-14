@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.base;
+package com.joshuadias.moneyplannerapi.domains.shared.base;
 
 import jakarta.persistence.*;
 import lombok.Getter;

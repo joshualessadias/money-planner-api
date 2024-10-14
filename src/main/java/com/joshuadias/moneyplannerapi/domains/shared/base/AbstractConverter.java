@@ -1,4 +1,4 @@
-package com.joshuadias.moneyplannerapi.domains.core.base;
+package com.joshuadias.moneyplannerapi.domains.shared.base;
 
 import com.joshuadias.moneyplannerapi.domains.core.utils.ModelMapperUtils;
 import org.modelmapper.PropertyMap;

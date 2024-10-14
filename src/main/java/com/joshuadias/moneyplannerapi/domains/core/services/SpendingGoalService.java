@@ -1,6 +1,6 @@
 package com.joshuadias.moneyplannerapi.domains.core.services;
 
-import com.joshuadias.moneyplannerapi.domains.core.base.AbstractServiceRepository;
+import com.joshuadias.moneyplannerapi.domains.shared.base.AbstractServiceRepository;
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.spendingGoal.CategorySpendingGoalRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.requests.spendingGoal.SpendingGoalRequestDTO;
 import com.joshuadias.moneyplannerapi.domains.core.dto.responses.spendingGoal.SpendingGoalResponseDTO;
