@@ -89,7 +89,9 @@ public enum MessageEnum {
     SPENDING_GOAL_UPDATED_WITH_ID("message.spending.goal.updated.with.id"),
     SPENDING_GOAL_REPEATED_OUTCOME_CATEGORY("message.spending.goal.repeated.outcome.category"),
     SPENDING_GOAL_DELETING_WITH_ID("message.spending.goal.deleting.with.id"),
-    SPENDING_GOAL_DELETED_WITH_ID("message.spending.goal.deleted.with.id");
+    SPENDING_GOAL_DELETED_WITH_ID("message.spending.goal.deleted.with.id"),
+
+    USER_NOT_ALLOWED_WITH_PHONE_NUMBER("message.user.not.allowed.with.phone.number");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
