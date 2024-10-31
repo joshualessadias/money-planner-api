@@ -91,7 +91,11 @@ public enum MessageEnum {
     SPENDING_GOAL_DELETING_WITH_ID("message.spending.goal.deleting.with.id"),
     SPENDING_GOAL_DELETED_WITH_ID("message.spending.goal.deleted.with.id"),
 
-    USER_NOT_ALLOWED_WITH_PHONE_NUMBER("message.user.not.allowed.with.phone.number");
+    USER_NOT_ALLOWED_WITH_PHONE_NUMBER("message.user.not.allowed.with.phone.number"),
+
+    WEBHOOK_IGNORE_EMPTY_MESSAGE("message.webhook.ignore.empty.message"),
+
+    ANSWER_MESSAGE_EMPTY_MESSAGE_IGNORED("message.answer.message.empty.message.ignored");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
