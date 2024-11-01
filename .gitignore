@@ -33,3 +33,6 @@ build/
 .vscode/
 
 application-local.properties
+
+### VertexAi key ###
+money-planner-api-15a90f755958.json
