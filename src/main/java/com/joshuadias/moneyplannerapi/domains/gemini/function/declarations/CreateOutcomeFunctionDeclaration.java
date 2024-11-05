@@ -17,7 +17,7 @@ public class CreateOutcomeFunctionDeclaration {
     public static FunctionDeclaration createOutcomeFunctionDeclaration() {
         return FunctionDeclaration.newBuilder()
                 .setName(FUNCTION_NAME)
-                .setDescription("Creates an outcome containing the information of the user purchase")
+                .setDescription("Creates a single outcome containing the information of the user purchase")
                 .setParameters(
                         Schema.newBuilder()
                                 .setType(Type.OBJECT)

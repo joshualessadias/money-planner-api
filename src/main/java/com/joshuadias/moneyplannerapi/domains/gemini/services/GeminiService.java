@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,7 @@ public class GeminiService {
 
     private Content buildSystemInstruction() {
         var contextMessage = contextMessageService.findLast().getText();
-        contextMessage = contextMessage + MessageEnum.CONTEXT_MESSAGE_CURRENT_DATE.getMessage(LocalDate.now()
-                                                                                                      .toString());
+        contextMessage = contextMessage + MessageEnum.CONTEXT_MESSAGE_CURRENT_DATE.getMessage() + " " + LocalDate.now();
         return ContentMaker.fromString(contextMessage);
     }
 
@@ -40,7 +40,8 @@ public class GeminiService {
         if (CreateOutcomeFunctionDeclaration.FUNCTION_NAME.equals(functionCall.getName())) {
             var argsMap = functionCall.getArgs().getFieldsMap();
             var request = CreateOutcomeMapper.toRequest(argsMap);
-            return outcomeService.create(request).toString();
+            var createdOutcome = outcomeService.create(request);
+            return "Created Outcome: " + createdOutcome.getDescription();
         }
         throw new BadRequestException(MessageEnum.FUNCTION_CALL_NOT_IMPLEMENTED.getMessage(functionCall.getName()));
     }
@@ -48,8 +49,15 @@ public class GeminiService {
     private String handleResponse(GenerateContentResponse response) {
         if (ResponseHandler.getFinishReason(response) == Candidate.FinishReason.STOP
                 && !ResponseHandler.getFunctionCalls(response).isEmpty()) {
-            log.info("Function call detected: {}", ResponseHandler.getFunctionCalls(response).getFirst().getName());
-            return callFunction(ResponseHandler.getFunctionCalls(response).getFirst());
+            int functionCallsSize = ResponseHandler.getFunctionCalls(response).size();
+            log.info("{} function calls detected", functionCallsSize);
+            var functionCallResponse = new ArrayList<String>();
+            while (functionCallsSize > 0) {
+                functionCallResponse.add(callFunction(ResponseHandler.getFunctionCalls(response)
+                                                              .get(functionCallsSize - 1)));
+                functionCallsSize--;
+            }
+            return String.join("\n", functionCallResponse);
         }
         return ResponseHandler.getText(response);
     }

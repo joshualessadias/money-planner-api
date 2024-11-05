@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ContextMessageRepository extends GenericRepository<ContextMessage, Long> {
 
-    Optional<ContextMessage> findByOrderByIdDesc();
+    Optional<ContextMessage> findTop1ByOrderByIdDesc();
 }

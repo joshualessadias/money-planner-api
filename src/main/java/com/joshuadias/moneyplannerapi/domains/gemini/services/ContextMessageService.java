@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class ContextMessageService extends AbstractServiceRepository<ContextMessageRepository, ContextMessage, Long> {
 
     public ContextMessage findLast() {
-        return repository.findByOrderByIdDesc()
+        return repository.findTop1ByOrderByIdDesc()
                 .orElseThrow(() -> new BadRequestException(MessageEnum.CONTEXT_MESSAGE_MUST_CREATE.getMessage()));
     }
 }
