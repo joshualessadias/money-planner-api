@@ -97,7 +97,10 @@ public enum MessageEnum {
 
     ANSWER_MESSAGE_EMPTY_MESSAGE_IGNORED("message.answer.message.empty.message.ignored"),
 
-    CONTEXT_MESSAGE_MUST_CREATE("message.context.message.must.create");
+    CONTEXT_MESSAGE_MUST_CREATE("message.context.message.must.create"),
+    CONTEXT_MESSAGE_CURRENT_DATE("message.context.message.current.date"),
+
+    FUNCTION_CALL_NOT_IMPLEMENTED("message.function.call.not.implemented");
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
     private final String description;
